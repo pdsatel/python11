@@ -1,0 +1,17 @@
+while True:
+ 
+    nome=input('Digite seu nome: ')
+    idade=int (input('Digite sua idade: '))
+    if idade <=5:
+        print('O aluno {} esta no Educação Infantil'.format (nome))
+    elif idade <=10:
+        print('O aluno {} esta no Ensino Fundamental 1'.format (nome))
+    elif idade <=14:
+     print('O aluno {} esta no Ensino Fundamental 2'.format (nome))
+    elif idade <=15:
+        print('O aluno {} esta no Ensino Médio'.formt (nome))
+    continuar= input('Deseja continuar (s/n)?')
+    if continuar.lower() !='s':
+        break    
+    
+    
