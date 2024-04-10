@@ -15,3 +15,22 @@ while True:
         break    
     
     
+
+substituicoes = {
+    'a': '@',
+    'e': '&',
+    'i': '!',
+    'o': '*',
+    'u': '#'
+}
+texto = input('Digite seu nome: ')
+texto1= texto.upper()
+print(texto1)
+texto_modificado = ''
+for caractere in texto:
+    if caractere.lower() in substituicoes:  
+        texto_modificado += substituicoes[caractere.lower()]
+    else:
+        texto_modificado += caractere
+
+print("Texto modificado:", texto_modificado)
