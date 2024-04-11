@@ -1,0 +1,16 @@
+def movimento_invalido(animal1, animal2):
+    if animal1!= 'cao' and animal2!= 'osso' and animal1!= 'gato' and animal2!= 'rato':
+        print("Movimento invalido. Escolha 'cao' ou 'gato' para o primeiro animal e 'osso' ou 'rato' para o segundo animal.")
+
+def jogo(animal1, animal2):
+    if animal1 == 'cao' and animal2 == 'osso':
+        print(f'O {animal1} comeu o {animal2}')
+
+    if animal1 == 'gato' and animal2 == 'rato':
+        print(f'O {animal1} comeu o {animal2}')
+
+animal1 = input('Escolha o primeiro animal: ')
+animal2 = input('Escolha o segundo animal: ')
+
+movimento_invalido(animal1, animal2)
+jogo(animal1, animal2)
