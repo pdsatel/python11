@@ -1,27 +1,40 @@
-ef jogo(animal1, animal2):
-    if animal1 == 'cao' and animal2 == 'osso':
-        print(f'O {animal1} comeu o {animal2}')
+import os
+import sys
+print('A sua primeira missão é colocar um gato e um rato em um dos quarto.')
+print('Porem só tem dois quartos vagos,o quarto 1 ao tem um gato e o quarto 2 tem um rato')
+print('aperte enter para continuar')
+char= sys.stdin.read(1)
+os.system('cls')  
 
-    if animal1 == 'gato' and animal2 == 'rato':
-        print(f'O {animal1} comeu o {animal2}')
-       
-    if animal1 == 'rato' and animal2 == 'queijo':
-        print(f'O {animal1} comeu o {animal2}')
-animal1 = input('Escolha o primeiro animal para colocar no quarto 1: ')
-animal2 = input('Escolha o segundo animal: ')
-quarto1= animal1
-quarto2= animal2
-animal3= input('Escolha o terceiro animal: ')
-if animal3 == 'queijo' and animal2 == 'rato':
-    print(f'O {animal2} comeu o {animal3}')
-    if animal3 == 'osso' and animal2 == 'cao':
-        print(f'O {animal2} comeu o {animal3}')
-    if animal3== 'gato'and animal2=='rato':
-         print(f'O {animal2} comeu o {animal3}')
-        
-         
-
-
-
-
-jogo(animal1, animal2))
+def jogo1(animal1, animal2,quarto1,quarto2,quarto3,quarto4): 
+    quarto1=='gato'
+    quarto3=='rato'
+    
+quarto2 = input('Qual animal você quer colocar no quarto ao lado do gato?  (quarto2): ')
+if quarto2=='rato':
+    print('O gato comeu o rato!!')
+    sys.exit()
+else:
+    print('Voce conseguiu !!')
+quarto3 = input('Qual animal você quer colocar no quarto ao lado do rato?  (quarto3): ')
+if quarto3=='gato':
+    print('O gato comeu o rato!! ')
+    sys.exit()
+else:
+    print('Voce conseguiu!! ')
+os.system('cls')  
+  
+print('Agora sua missao é colocar dois cães e um osso.')     
+print('Você tem 3 quartos vagos um deles esta ocupado por um cão ')
+print('O lugar vagos são um isolado, um ao lado do cão e outro ao lado dessa falada')  
+    
+      
+def jogo2(quarto2,quarto4,quarto3):
+   quarto2='cão'
+quarto3=input('Qual item você vai colocar no quarto ao lado do cão: ')   
+if quarto3 =='osso':
+    print('O cão comeu o osso')
+    sys.exit()
+else:
+    print('Você conseguiu!!') 
+quarto4=input('Qual item você quer colocar no quarto ao lado do quarto anterior: ')
