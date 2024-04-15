@@ -1,4 +1,3 @@
-import os
 import sys
 def jogo1(quarto2 ,quarto3,):     
         quarto2 = input('Qual animal você quer colocar no quarto ao lado do gato?  (quarto2): ')
@@ -13,25 +12,25 @@ def jogo1(quarto2 ,quarto3,):
                     sys.exit()
             else:
                 print('Voce conseguiu!! ')
-                os.system('cls')
-def jogo2(quarto5,quarto6,quarto7,quarto8):
-        print('Agora sua missao é colocar dois cães e um osso.') 
-        print('')    
-        print('Você tem 3 quartos vagos um deles esta ocupado por um cão ')
-        print('')
-        print('Os lugares vagos são, um isolado, um ao lado do cão e outro ao lado dessa falada')      
-    quarto5='cão'
+def jogo2 (quarto5,quarto6,quarto7,quarto8,):
+ 
+    print('Agora sua missao é colocar dois cães e um osso.') 
+    print('')    
+    print('Você tem 3 quartos vagos um deles esta ocupado por um cão ')
+    print('')
+    print('Os lugares vagos são, um isolado, um ao lado do cão e outro ao lado dessa falada')      
+
     quarto6=input('Qual item você vai colocar no quarto ao lado do cão: ')   
     if quarto6 =='osso':
                     print('O cão comeu o osso')
                     sys.exit()
-else:
+    else:
             print('Você conseguiu!!') 
-quarto7=input('Qual item você quer colocar no quarto ao lado do quarto anterior: ')
-if quarto7=='osso':
+            quarto7=input('Qual item você quer colocar no quarto ao lado do quarto anterior: ')
+            if quarto7=='osso':
                     print('O cão comeu o osso')
                     sys.exit()
-else:
+        else:
             print('Você conseguiu!!')
 quarto8=input('Qual item você quer colocar no quarto que esta isolado: ')
 if quarto8=='osso':
@@ -96,23 +95,6 @@ else:
 print(menu)
     
     
-
-
-
-
-
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-          
 
 
 
