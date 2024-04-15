@@ -1,40 +1,104 @@
 import os
 import sys
-print('A sua primeira missão é colocar um gato e um rato em um dos quarto.')
-print('Porem só tem dois quartos vagos,o quarto 1 ao tem um gato e o quarto 2 tem um rato')
-print('aperte enter para continuar')
-char= sys.stdin.read(1)
-os.system('cls')  
 
-def jogo1(animal1, animal2,quarto1,quarto2,quarto3,quarto4): 
-    quarto1=='gato'
-    quarto3=='rato'
-    
-quarto2 = input('Qual animal você quer colocar no quarto ao lado do gato?  (quarto2): ')
-if quarto2=='rato':
+
+
+def jogo1(quarto2 ,quarto3,):     
+        quarto2 = input('Qual animal você quer colocar no quarto ao lado do gato?  (quarto2): ')
+        if quarto2=='rato':
+            print('O gato comeu o rato!!')
+            sys.exit()
+        else:
+            print('Voce conseguiu !!')
+            quarto3 = input('Qual animal você quer colocar no quarto ao lado do rato?  (quarto3): ')
+            if quarto3=='gato':
+                print('O gato comeu o rato!! ')
+                sys.exit()
+            else:
+                print('Voce conseguiu!! ')
+                os.system('cls')
+def jogo2(quarto2,quarto4,quarto3,quarto5):
+    print('Agora sua missao é colocar dois cães e um osso.') 
+    print('')    
+    print('Você tem 3 quartos vagos um deles esta ocupado por um cão ')
+    print('')
+    print('Os lugares vagos são, um isolado, um ao lado do cão e outro ao lado dessa falada')      
+    quarto2='cão'
+    quarto3=input('Qual item você vai colocar no quarto ao lado do cão: ')   
+    if quarto3 =='osso':
+        print('O cão comeu o osso')
+        sys.exit()
+    else:
+        print('Você conseguiu!!') 
+        quarto4=input('Qual item você quer colocar no quarto ao lado do quarto anterior: ')
+    if quarto4=='osso':
+        print('O cão comeu o osso')
+        sys.exit()
+    else:
+         print('Você conseguiu!!')
+    quarto5=input('Qual item você quer colocar no quarto que esta isolado: ')
+    if quarto5=='osso':
+        print('Você conseguiu !!')
+    else:
+        print('Não é possivel que você colocou isso ???')
+        sys.exit()   
+        
+def jogo3(quarto6,quarto7,quarto8):
+  print('Parabéns você passou de fase')
+  print('Agora sua missão é colocar um gato,um rato e um osso')
+  print('Porem tem um dos quartos que esta ocupado por um gato')
+  print('')
+  quarto6=input("Qual animal você quer colocar no quarto ao lado direito do gato?")
+  if quarto6=='rato':
     print('O gato comeu o rato!!')
     sys.exit()
-else:
-    print('Voce conseguiu !!')
-quarto3 = input('Qual animal você quer colocar no quarto ao lado do rato?  (quarto3): ')
-if quarto3=='gato':
-    print('O gato comeu o rato!! ')
-    sys.exit()
-else:
-    print('Voce conseguiu!! ')
-os.system('cls')  
-  
-print('Agora sua missao é colocar dois cães e um osso.')     
-print('Você tem 3 quartos vagos um deles esta ocupado por um cão ')
-print('O lugar vagos são um isolado, um ao lado do cão e outro ao lado dessa falada')  
-    
+  if quarto6== 'osso':
+    print('Você tem um plano diferente')
+  else:
+    print('Você conseguiu!!')
       
-def jogo2(quarto2,quarto4,quarto3):
-   quarto2='cão'
-quarto3=input('Qual item você vai colocar no quarto ao lado do cão: ')   
-if quarto3 =='osso':
-    print('O cão comeu o osso')
-    sys.exit()
-else:
-    print('Você conseguiu!!') 
-quarto4=input('Qual item você quer colocar no quarto ao lado do quarto anterior: ')
+    quarto7=input('Agora qual animal você quer colocar no quarto ao lado esquerdo do gato?')
+    if quarto7=='rato':
+         print('O gato comeu o rato')
+         sys.exit()
+    if quarto7=='gato':
+        print('Qual o seu plano agr???')    
+    P2=input('CONTINUAR(1) ou VOlTAR AO INICIO(2): ')
+    if P2==1:
+        print('NÃO TEM COMO VOCE CONTINUAR AMIGÃOO')
+        sys.exit
+    else:
+      print('VOLTANDO AO INICIO')
+    
+    
+    
+    
+def menu():
+    print("1. Jogar ")
+    print("2. Tutorial")
+    print("3. Creditos")
+    print("4. Exit")
+
+    choice = int(input("Escolha uma opçao e aperte enter: "))
+
+    if choice == 1:
+        print('     BEM-VINDO AO JOGO DO HOTEL')
+        jogo1()
+        jogo2()
+        jogo3()
+    elif choice == 2:
+        print("O seu objetivo é alocar animais dentro de um hotel")
+        print('Porem você não pode deixar aos animais/objetos juntos')
+        print('Você não pode deixar o Osso junto com o Cão, não pode deixar o Gato junto com o Rato')
+        print('E não pode deixar o Rato junto com Queijo')
+    elif choice == 3:
+        print("Pedro")
+    elif choice == 4:
+        print("Saind do programa...")
+    else:
+        print("Opção invalida...")  
+        
+        
+def main(): 
+    menu()
+    print('pp´p')
