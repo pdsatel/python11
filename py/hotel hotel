@@ -1,23 +1,37 @@
 import sys
-def jogo1(quarto2 ,quarto3,):     
-        quarto2 = input('Qual animal você quer colocar no quarto ao lado do gato?  (quarto2): ')
-        if quarto2=='rato':
-            print('O gato comeu o rato!!')
-            sys.exit()
+import os
+    
+    
+  
+def clear_scream():
+        if os.name =='nt':
+                os.system('cls')
         else:
-            print('Voce conseguiu !!')
-            quarto3 = input('Qual animal você quer colocar no quarto ao lado do rato?  (quarto3): ')
-            if quarto3=='gato':
-                    print('O gato comeu o rato!! ')
-                    sys.exit()
-            else:
+               os.system('clear')
+
+def jogo1(): 
+        clear_scream()        
+        print('A sua primeira missão é colocar um gato e um rato nos quartos corrteos, e não se esqueça das regras')
+        quarto2=input('Qual animal você quer colocar no quarto ao lado do gato?  (quarto2): ')
+        if quarto2=='rato':
+                print('O gato comeu o rato!!')
+                sys.exit()
+         
+
+        else:
+         print('Voce conseguiu !!')
+        quarto3=input('Qual animal você quer colocar no quarto ao lado do rato?  (quarto3): ')
+        if quarto3=='gato':
+             print('O gato comeu o rato!! ')
+             sys.exit()
+             
+        else:
                 print('Voce conseguiu!! ')
-def jogo2 (quarto5,quarto6,quarto7,quarto8,):
- 
+                
+def jogo2 ():
+    clear_scream()
     print('Agora sua missao é colocar dois cães e um osso.') 
-    print('')    
     print('Você tem 3 quartos vagos um deles esta ocupado por um cão ')
-    print('')
     print('Os lugares vagos são, um isolado, um ao lado do cão e outro ao lado dessa falada')      
 
     quarto6=input('Qual item você vai colocar no quarto ao lado do cão: ')   
@@ -25,20 +39,22 @@ def jogo2 (quarto5,quarto6,quarto7,quarto8,):
                     print('O cão comeu o osso')
                     sys.exit()
     else:
-            print('Você conseguiu!!') 
-            quarto7=input('Qual item você quer colocar no quarto ao lado do quarto anterior: ')
-            if quarto7=='osso':
+                        print('Você conseguiu!!')  
+                        
+    quarto7=input('Qual item você quer colocar no quarto ao lado do quarto anterior: ')
+    if quarto7=='osso':
                     print('O cão comeu o osso')
                     sys.exit()
-        else:
-            print('Você conseguiu!!')
-quarto8=input('Qual item você quer colocar no quarto que esta isolado: ')
-if quarto8=='osso':
+    else:
+                         print('Você conseguiu!!')
+    quarto8=input('Qual item você quer colocar no quarto que esta isolado: ')
+    if quarto8=='osso':
             print('Você conseguiu !!')
-else:
+    else:
             print('Não é possivel que você colocou isso ???')
             sys.exit()           
-def jogo3(quarto9,quarto10,quarto11):
+def jogo3():
+    clear_scream
     print('Parabéns você passou de fase')
     print('Agora sua missão é colocar um gato,um rato e um osso')
     print('Porem tem um dos quartos que esta ocupado por um gato')
@@ -76,25 +92,54 @@ print("4. Exit")
 choice = int(input("Escolha uma opçao e aperte enter: "))
 
 if choice == 1:
-            print('     BEM-VINDO AO JOGO DO HOTEL')
-            jogo2()
-    
+ print('     BEM-VINDO AO JOGO DO HOTEL')
+ jogo1()
+ jogo2()
+ jogo3()
+ 
+ 
 elif choice == 2:
-        print("O seu objetivo é alocar animais dentro de um hotel")
-        print('Porem você não pode deixar aos animais/objetos juntos')
-        print('Você não pode deixar o Osso junto com o Cão, não pode deixar o Gato junto com o Rato')
-        print('E não pode deixar o Rato junto com Queijo')
+ print("O seu objetivo é alocar animais dentro de um hotel")
+ print('')
+ print('Porem você não pode deixar aos animais/objetos juntos')
+ print('')
+ print('Você não pode deixar o Osso junto com o Cão, não pode deixar o Gato junto com o Rato')
+ print('')
+ print('E não pode deixar o Rato junto com Queijo')
+
+ 
+ 
+        
+ 
 elif choice == 3:
-        print("Pedro")
+        print("Pedro") 
+        
 elif choice == 4:
         print("Saind do programa...")
 else:
         print("Opção invalida...")   
             
                        
-print(menu)
+menu()
     
     
+
+
+
+
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+          
 
 
 
