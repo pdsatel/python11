@@ -10,9 +10,11 @@ def clear_scream():
                os.system('clear')
 
 def jogo1(): 
-        clear_scream()        
+        clear_scream()          
         print('A sua primeira missão é colocar um gato e um rato nos quartos corrteos, e não se esqueça das regras')
-        quarto2=input('Qual animal você quer colocar no quarto ao lado do gato?  (quarto2): ')
+        print('|-----| |-----| |-----||Gato|')
+        quarto2=input('Qual animal você quer colocar no quarto ao lado do gato?  (quarto2): ')   
+        print('')
         if quarto2=='rato':
                 print('O gato comeu o rato!!')
                 sys.exit()
@@ -20,19 +22,29 @@ def jogo1():
 
         else:
          print('Voce conseguiu !!')
+         print('|-----| |-----| |Gato||Gato|')
+         clear_scream()
+         print('|-----| |-----| |Gato||Gato|')
+         print('|Rato| |-----| |----||----|')
         quarto3=input('Qual animal você quer colocar no quarto ao lado do rato?  (quarto3): ')
         if quarto3=='gato':
              print('O gato comeu o rato!! ')
              sys.exit()
-             
+              
         else:
-                print('Voce conseguiu!! ')
+             print('|-----| |-----| |Gato||Gato|')
+             print('|Rato| |Rato| |----||----|')   
+             print('Voce conseguiu!! ')
                 
 def jogo2 ():
-    clear_scream()
+    print('')
+    clear_scream
     print('Agora sua missao é colocar dois cães e um osso.') 
     print('Você tem 3 quartos vagos um deles esta ocupado por um cão ')
-    print('Os lugares vagos são, um isolado, um ao lado do cão e outro ao lado dessa falada')      
+    print('Os lugares vagos são, um isolado, um ao lado do cão e outro ao lado dessa falada')   
+    
+    print('|-----| |-----| |Gato||Gato|')
+    print('|Cão| |----| |----||----|')      
 
     quarto6=input('Qual item você vai colocar no quarto ao lado do cão: ')   
     if quarto6 =='osso':
@@ -79,7 +91,11 @@ def jogo3():
             print('NÃO TEM COMO VOCE CONTINUAR AMIGÃOO')
             sys.exit
     else:
-      print('VOLTANDO AO INICIO')    
+      print('VOLTANDO AO INICIO')  
+      
+def jogo4():
+    clear_scream
+    print()      
 def menu():
     while True:
         print("Bem-vindo ao Hotel")
@@ -111,3 +127,24 @@ def menu():
         else:
             print("Opção invalida...")
 menu()
+    
+    
+
+
+
+
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+          
+
+
