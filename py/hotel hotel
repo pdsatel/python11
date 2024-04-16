@@ -43,25 +43,31 @@ def jogo2 ():
     print('Você tem 3 quartos vagos um deles esta ocupado por um cão ')
     print('Os lugares vagos são, um isolado, um ao lado do cão e outro ao lado dessa falada')   
     
-    print('|-----| |-----| |Gato||Gato|')
-    print('|Cão| |----| |----||----|')      
+    print('|-----| |-----| |----||----|')
+    print('|-----| | Cão | |----||----|')      
 
     quarto6=input('Qual item você vai colocar no quarto ao lado do cão: ')   
     if quarto6 =='osso':
                     print('O cão comeu o osso')
                     sys.exit()
     else:
-                        print('Você conseguiu!!')  
+         print('|-----| |-----| |----||----|')
+         print('|-----| | Cão | | Cão||----|')
+         print('Você conseguiu!!')  
                         
     quarto7=input('Qual item você quer colocar no quarto ao lado do quarto anterior: ')
     if quarto7=='osso':
                     print('O cão comeu o osso')
                     sys.exit()
     else:
-                         print('Você conseguiu!!')
+        print('|-----| |-----| |----||----|')
+        print('|-----| | Cão | | Cão|| Cão|')
+        print('Você conseguiu!!')
     quarto8=input('Qual item você quer colocar no quarto que esta isolado: ')
     if quarto8=='osso':
-            print('Você conseguiu !!')
+        print('| Osso| |-----| |----||----|')
+        print('|-----| | Cão | | Cão|| Cão|')
+        print('Você conseguiu !!')
     else:
             print('Não é possivel que você colocou isso ???')
             sys.exit()           
@@ -109,7 +115,9 @@ def menu():
         if choice == 1:
             print('     BEM-VINDO AO JOGO DO HOTEL')
             jogo1()
+            clear_scream
             jogo2()
+            clear_scream
             jogo3()
         elif choice == 2:
             clear_scream
