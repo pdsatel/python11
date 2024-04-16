@@ -81,65 +81,33 @@ def jogo3():
     else:
       print('VOLTANDO AO INICIO')    
 def menu():
-    
-    
-    print("Bem-vindo ao Hotel")
-print("1. Jogar ")
-print("2. Tutorial")
-print("3. Creditos")
-print("4. Exit")
+    while True:
+        print("Bem-vindo ao Hotel")
+        print("1. Jogar ")
+        print("2. Tutorial")
+        print("3. Creditos")
+        print("4. Exit")
 
-choice = int(input("Escolha uma opçao e aperte enter: "))
-
-if choice == 1:
- print('     BEM-VINDO AO JOGO DO HOTEL')
- jogo1()
- jogo2()
- jogo3()
- 
- 
-elif choice == 2:
- print("O seu objetivo é alocar animais dentro de um hotel")
- print('')
- print('Porem você não pode deixar aos animais/objetos juntos')
- print('')
- print('Você não pode deixar o Osso junto com o Cão, não pode deixar o Gato junto com o Rato')
- print('')
- print('E não pode deixar o Rato junto com Queijo')
-
- 
- 
+        choice = int(input("Escolha uma opçao e aperte enter: "))
+        clear_scream
+        if choice == 1:
+            print('     BEM-VINDO AO JOGO DO HOTEL')
+            jogo1()
+            jogo2()
+            jogo3()
+        elif choice == 2:
+            clear_scream
+            print("O seu objetivo é alocar animais dentro de um hotel")
+            print('Porem você não pode deixar aos animais/objetos juntos')
+            print('Você não pode deixar o Osso junto com o Cão, não pode deixar o Gato junto com o Rato')
         
- 
-elif choice == 3:
-        print("Pedro") 
-        
-elif choice == 4:
-        print("Saind do programa...")
-else:
-        print("Opção invalida...")   
-            
-                       
+            print('E não pode deixar o Rato junto com Queijo')
+        elif choice == 3:
+            clear_scream
+            print("Pedro") 
+        elif choice == 4:
+            print("Saindo do programa...")
+            break
+        else:
+            print("Opção invalida...")
 menu()
-    
-    
-
-
-
-
-
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-          
-
-
-
