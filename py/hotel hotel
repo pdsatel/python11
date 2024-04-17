@@ -99,20 +99,35 @@ def jogo3():
         print('|-----| |-----| |----||----|')
         print('|-----| | Gato| |----||----|') 
         quarto9=input("Qual animal você quer colocar no quarto ao lado direito do gato?")        
-        if quarto9=='rato':
-            print('O gato comeu o rato!!')
-            print('Tente Novamente hahaha')
-            clear_scream()
-            print('O gato comeu o rato!!')
-            print('Tente Novamente hahaha')
-            menu2()
-        else:
+        if quarto9=='gato':
             print('Você conseguiu')
             print('|-----| |-----| |----||----|')
             print('|-----| | Gato| |Gato||----|')
-        quarto10=input('Agora qual animal você quer colocar no quarto ao lado esquerdo do primeiro gato?')
-        print('|-----| |-----| |----||----|')
-        print('|-----| | Gato| |Gato||----|')
+        elif quarto9=='osso':
+                print('você tem um plano diferente então')
+                print('|-----| |-----| |----||----|')
+                print('|-----| | Gato| |Osso||----|')
+                
+        else:
+                print('O gato comeu o rato!!')
+                print('Tente Novamente hahaha')
+                clear_scream()
+                print('O gato comeu o rato!!')
+                print('Tente Novamente hahaha')
+                menu2()
+        quarto10=input('Agora qual animal você quer colocar no quarto ao lado esquerdo do primeiro gato? ')
+        if quarto10== 'osso':
+                 print('Você conseguiu')
+                 print('|-----| |-----| |----||----|')
+                 print('|osso| | Gato| |Gato||----|')
+        elif quarto10=='gato':
+                P3=input('Tem certeza que quer continuar nesse plano? (1 sim)(2 nao)')      
+                if P3=='2':
+                        clear_scream()
+                        menu2()
+                else:
+                        print('Não é possivel que você acha que vai da certo isso')
+                        menu2()   
         if quarto10=='rato':
          print('O gato comeu o rato')
          print('Tente Novamente hahaha')
@@ -120,10 +135,7 @@ def jogo3():
          print('O gato comeu o rato')
          print('Tente Novamente hahaha')
          menu2()
-        else:
-            print('Você conseguiu')
-            print('|-----| |-----| |----||----|')
-            print('|Osso | | Gato| |Gato||----|')
+        
            
         quarto11=input('Qual animal você quer colocar no quarto a cima do osso? ')
         if quarto11==('rato'):
@@ -131,15 +143,7 @@ def jogo3():
             print('|Osso | | Gato| |Gato||----|')  
             print('Você conseguiu!!!')
             print('Parabéns você passou de fase')
-        if quarto9=='osso':
-            print('você tem um plano difenrente ')
-        if quarto10=='Gato':
-            print('E vai da certo isso ai?? ')
-            pe=input('Vai querer continua nesse seu plano?  (1 sim) (2 não)')
-            if pe=='1':
-                print('Não da certo você não entendeu ainda???')    
-            else:
-                menu2()
+        
       
 def jogo4():
     while True:
@@ -152,7 +156,6 @@ def jogo4():
          if quarto5=='queijo':
             print('O rato comeu o queijo')
             print('Tente Novamente hahaha')
-            clear_scream()
             print('O rato comeu o queijo')
             print('Tente Novamente hahaha')
             menu2()
@@ -177,7 +180,7 @@ def jogo4():
              
   
 def menu():
-    while True:
+    
         print("Bem-vindo ao Hotel")
         print("1. Jogar ")
         print("2. Tutorial")
@@ -194,7 +197,7 @@ def menu():
             clear_scream
             jogo3()
             jogo4()
-            break
+            sys.exit()
         elif choice == 2:
             clear_scream()
             print("O seu objetivo é alocar animais dentro de um hotel")
@@ -212,7 +215,7 @@ def menu():
             menu2()
         elif choice == 4:
             print("Saindo do programa...")
-            break
+            sys.exit()
         else:
             print("Opção invalida...")
             
