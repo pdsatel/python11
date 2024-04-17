@@ -119,14 +119,16 @@ def jogo3():
         if quarto10== 'osso':
                  print('Você conseguiu')
                  print('|-----| |-----| |----||----|')
-                 print('|osso| | Gato| |Gato||----|')
+                 print('|Osso| | Gato| |Gato||----|')
         elif quarto10=='gato':
+                print('|-----| |-----| |----||----|')
+                print('| Gato| | Gato| |Osso||----|')
                 P3=input('Tem certeza que quer continuar nesse plano? (1 sim)(2 nao)')      
                 if P3=='2':
                         clear_scream()
                         menu2()
                 else:
-                        print('Não é possivel que você acha que vai da certo isso')
+                        print('Não é possivel que você achou que iria dar certo isso')
                         menu2()   
         if quarto10=='rato':
          print('O gato comeu o rato')
