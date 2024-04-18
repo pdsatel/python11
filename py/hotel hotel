@@ -19,39 +19,36 @@ def jogo1():
         clear_scream()          
         print('A sua primeira missão é colocar um gato e um rato nos quartos corrteos, e não se esqueça das regras')
         print('|--x--| |--x--| |-----||Gato|')
-        quarto2=input('Qual animal você quer colocar no quarto ao lado do gato?  (quarto2): ')   
+        quarto2=input('Escreva qual animal você quer colocar no quarto ao lado do gato?  (quarto2): ')
         print('')
-        if quarto2=='rato':
-                print('O gato comeu o rato!!')
-                print('Tente Novamente hahaha')
-                clear_scream()
-                print('O gato comeu o rato!!')
-                print('Tente Novamente hahaha')
-                print('Carregando...')
-                time.sleep(5)
-                menu2()
+        if quarto2 =='rato':
+            clear_scream()
+            print('O gato comeu o rato!!')
+            print('Tente Novamente hahaha')
+            print('Carregando...')
+            time.sleep(5)
+            menu2()
 
         else:
          print('Voce conseguiu !!')
          print('')
          print('|--x--| |-----| |Gato||Gato|')
          print('|Rato| |-----| |--x--||--x--|')
-        quarto3=input('Qual animal você quer colocar no quarto ao lado do rato?  (quarto3): ')
+        quarto3=input('Escreva qual animal você quer colocar no quarto ao lado do rato?  (quarto3): ')
+        
         if quarto3=='gato':
-             print('O gato comeu o rato!! ')
-             print('Tente Novamente hahaha')
-             clear_scream()
-             print('O gato comeu o rato!! ')
-             print('Tente Novamente hahaha')
-             print('Carregando...')
-             time.sleep(5)
-             menu2()
+            clear_scream()
+            print('O gato comeu o rato!! ')
+            print('Tente Novamente hahaha')
+            print('Carregando...')
+            time.sleep(5)
+            menu2()
         else:
-             print('|--x--| |--x--| |Gato||Gato|')
-             print('|Rato| |Rato| |--x--||--x--|')   
-             print('Voce conseguiu!! ')
-             print('Parabéns você passou de fase')
-             print('Carregando...')
+            print('|--x--| |--x--| |Gato||Gato|')
+            print('|Rato| |Rato| |--x--||--x--|')   
+            print('Voce conseguiu!! ')
+            print('Parabéns você passou de fase')
+            print('Carregando...')
         time.sleep(5)           
 def jogo2 ():
     clear_scream()
@@ -62,50 +59,49 @@ def jogo2 ():
     print('|-----| |--x--| |--x--||--x--|')
     print('|--x--| | Cão | |----||----|')      
 
-    quarto6=input('Qual item você vai colocar no quarto ao lado do cão: ')   
+    quarto6=input('Escreva qual item você vai colocar no quarto ao lado do cão: ')   
+    
     if quarto6 =='osso':
-                    print('O cão comeu o osso')
-                    print('Tente Novamente hahaha')
-                    clear_scream()
-                    print('O cão comeu o osso')
-                    print('Tente Novamente hahaha')
-                    print('Carregando...')
-                    time.sleep(5)
-                    menu2()
+                print('O cão comeu o osso')
+                print('Tente Novamente hahaha')
+                clear_scream()
+                print('O cão comeu o osso')
+                print('Tente Novamente hahaha')
+                print('Carregando...')
+                time.sleep(5)
+                menu2()
     else:
          print('|-----| |--x--| |--x--||--x--|')
          print('|--x--| | Cão | | Cão||----|')
          print('Você conseguiu!!')  
                         
-    quarto7=input('Qual item você quer colocar no quarto ao lado do quarto anterior: ')
+    quarto7=input('Escreva qual item você quer colocar no quarto ao lado do quarto anterior: ')
+    
     if quarto7=='osso':
-                    print('O cão comeu o osso')
-                    print('Tente Novamente hahaha')
-                    clear_scream()
-                    print('O cão comeu o osso')
-                    print('Tente Novamente hahaha')
-                    print('Carregando...')
-                    time.sleep(5)
-                    menu2()
+                clear_scream()
+                print('O cão comeu o osso')
+                print('Tente Novamente hahaha')
+                print('Carregando...')
+                time.sleep(5)
+                menu2()
     else:
         print('|-----| |--x--| |--x--||--x--|')
         print('|--x--| | Cão | | Cão|| Cão|')
         print('Você conseguiu!!')
-    quarto8=input('Qual item você quer colocar no quarto que esta isolado: ')
+    quarto8=input('Escreva qual item você quer colocar no quarto que esta isolado: ')
+    
     if quarto8=='osso':
         print('| Osso| |--x--| |--x--||--x--|')
         print('|--x--| | Cão | | Cão|| Cão|')
         print('Você conseguiu !!')
         print('Parabéns você passou de fase')
     else:
-            print('Não é possivel que você colocou isso ???')
-            print('Tente Novamente hahaha')
-            clear_scream()
-            print('Não é possivel que você colocou isso ???')
-            print('Tente Novamente hahaha')
-            print('Carregando...')
-            time.sleep(5)
-            menu2()  
+        clear_scream()
+        print('Não é possivel que você colocou isso ???')
+        print('Tente Novamente hahaha')
+        print('Carregando...')
+        time.sleep(5)
+        menu2()  
     time.sleep(5)           
 def jogo3():
         clear_scream()
@@ -114,7 +110,8 @@ def jogo3():
         print('')
         print('|-----| |--x--| |--x--||--x--|')
         print('|-----| | Gato| |----||--x--|') 
-        quarto9=input("Qual animal você quer colocar no quarto ao lado direito do gato?")        
+        quarto9=input("Escreva qual animal você quer colocar no quarto ao lado direito do gato?")    
+           
         if quarto9=='gato':
             print('Você conseguiu')
             print('|----| |--x--| |--x--||--x--|')
@@ -133,7 +130,8 @@ def jogo3():
                 print('Carregando...')
                 time.sleep(5)
                 menu2()
-        quarto10=input('Agora qual animal você quer colocar no quarto ao lado esquerdo do primeiro gato? ')
+        quarto10=input('Agora escreva qual animal você quer colocar no quarto ao lado esquerdo do primeiro gato? ')
+
         if quarto10== 'osso':
                  print('Você conseguiu')
                  print('|-----| |--x--| |--x--||--x--|')
@@ -159,7 +157,8 @@ def jogo3():
          menu2()
         
            
-        quarto11=input('Qual animal você quer colocar no quarto a cima do osso? ')
+        quarto11=input('Escreva qual animal você quer colocar no quarto a cima do osso? ')
+        
         if quarto11==('rato'):
             print('|Rato | |--x--| |--x--||--x--|')
             print('|Osso | | Gato| |Gato| |--x--|')  
@@ -175,7 +174,8 @@ def jogo4():
          print('Porém um dos quartos esta ocupado por um rato')     
          print('|-----| |-----|  |-----||--x--|')
          print('|--x--| | Rato | |--x--||--x--|')  
-         quarto5=input('Qual objeto você quer colocar no quarto acima do rato? ')
+         quarto5=input('Escreva qual objeto você quer colocar no quarto acima do rato? ')
+         
          if quarto5=='queijo':
             print('O rato comeu o queijo')
             print('Tente Novamente hahaha')
@@ -190,12 +190,14 @@ def jogo4():
             print('')
             print('|-----| | Osso | |----| |--x--|')
             print('|--x--| | Rato | |--x--||--x--|') 
-            quarto6=input('Qual objeto você quer colocar no quarto ao lado do osso? ')
+            quarto6=input('Escreva qual objeto você quer colocar no quarto ao lado do osso? ')
+            
             if quarto6=='queijo':
                 print('Você conseguiu!!')
                 print('|Queijo| | Osso ||-----||--x--|')
                 print('|--x--| | Rato | |--x--||--x--|') 
-            quarto7=input('Qual objeto você quer colocar no quarto ao lado direito do osso? ')
+            quarto7=input('Escreva qual objeto você quer colocar no quarto ao lado direito do osso? ')
+            
             if quarto7==('queijo'):
              print('Você conseguiu!!')
              print('|Queijo| | Osso | |queijo||--x--|')
@@ -271,4 +273,3 @@ def Parabens():
 
         
 menu()
-
