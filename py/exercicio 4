@@ -1,0 +1,39 @@
+import random
+
+inscricoes = []
+
+def adicionar_inscricao(nome, email, telefone, curso):
+    voucher_code = random.randint(100000, 999999) # generate a random voucher code
+    inscricao = (voucher_code, nome, email, telefone, curso)
+    inscricoes.append(inscricao)
+    return inscricao
+
+def visualizar_inscricoes():
+    if not inscricoes:
+        print("Nenhuma inscrição cadastrada.")
+    else:
+        for inscricao in inscricoes:
+            print(f"Código: {inscricao[0]}, Nome: {inscricao[1]}, Email: {inscricao[2]}, Telefone: {inscricao[3]}, Curso: {inscricao[4]}")
+
+def main():
+    while True:
+        print("\n1. Inscrição")
+        print("2. Visualizar inscrição")
+        print("0. Encerrar")
+        opcao = int(input("Digite uma opção: "))
+        if opcao == 1:
+            nome = input("Digite o nome: ")
+            email = input("Digite o email: ")
+            telefone = input("Digite o telefone: ")
+            curso = input("Digite o curso: ")
+            adicionar_inscricao(nome, email, telefone, curso)
+            print(f"Inscrição adicionada com sucesso! Seu código de voucher é {inscricoes[-1][0]}")
+        elif opcao == 2:
+            visualizar_inscricoes()
+        elif opcao == 0:
+            break
+        else:
+            print("Erro: digite uma opção válida!")
+
+if __name__ == "__main__":
+    main()
