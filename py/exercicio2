@@ -1,0 +1,12 @@
+def converter_nome(nome):
+    vogais = {'A': '@', 'E': '&', 'I': '!', 'O': '#', 'U': '*'}
+    resultado = ''
+    for letter in nome:
+        if letter.upper() in vogais:
+            resultado += vogais[letter.upper()]
+        else:
+            resultado += letter
+    return resultado.upper() + '!'
+
+nome = input('Digite um nome: ')
+print(converter_nome(nome))
