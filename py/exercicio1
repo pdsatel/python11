@@ -1,1 +1,24 @@
+def classificar_idade(nome, idade):
+    if idade < 1:
+        return f"{nome}, ainda não tem idade suficiente para entrar na escola."
+    elif idade <= 5:
+        return f"{nome}, está na etapa da Educação Infantil."
+    elif idade <= 10:
+        return f"{nome}, está na etapa do Ensino Fundamental I."
+    elif idade <= 14:
+        return f"{nome}, está na etapa do Ensino Fundamental II."
+    else:
+        return f"{nome}, está na etapa do Ensino Médio."
 
+def main():
+    while True:
+        nome = input("Digite o nome da criança: ")
+        idade = int(input("Digite a idade da criança: "))
+        classificacao = classificar_idade(nome, idade)
+        print(classificacao)
+        print("\nDeseja continuar? (s/n)")
+        if input().lower() != 's':
+            break
+
+if __name__ == "__main__":
+    main()
