@@ -1,0 +1,88 @@
+import tkinter as tk
+from tkinter import simpledialog
+
+
+
+class ListaApp:
+    def __init__(self, master):
+        self.master = master
+        self.master.title("Lista de Compras")
+
+        self.lista = []
+
+        self.label_produto = tk.Label(self.master, text="Adicionar produto:")
+        self.label_produto.pack()
+
+        self.input_produto = tk.Entry(self.master)
+        self.input_produto.pack()
+        self.input_produto.bind('<Return>', lambda event: self.input_preco.focus())  # Pressionar Enter vai para o próximo campo
+
+        self.label_preco = tk.Label(self.master, text="Preço do produto:")
+        self.label_preco.pack()
+
+        self.input_preco = tk.Entry(self.master)
+        self.input_preco.pack()
+        self.input_preco.bind('<Return>', lambda event: self.input_quantidade.focus())  # Pressionar Enter vai para o próximo campo
+
+        self.label_quantidade = tk.Label(self.master, text="Quantidade:")
+        self.label_quantidade.pack()
+
+        self.input_quantidade = tk.Entry(self.master)
+        self.input_quantidade.pack()
+        self.input_quantidade.bind('<Return>', lambda event: self.adicionar_item())  # Pressionar Enter adiciona o item
+
+        self.adicionar_button = tk.Button(self.master, text="Adicionar Item", command=self.adicionar_item)
+        self.adicionar_button.pack()
+
+        self.remover_button = tk.Button(self.master, text="Remover Item", command=self.remover_item)
+        self.remover_button.pack()
+
+        self.output_text = tk.Text(self.master, height=10, width=50)
+        self.output_text.pack()
+
+    def adicionar_item(self):
+        produto = self.input_produto.get()
+        preco = self.input_preco.get()
+        quantidade = self.input_quantidade.get()
+        if produto and preco and quantidade:
+            item = (produto, preco, quantidade)
+            self.lista.append(item)
+            self.atualizar_lista()
+            self.limpar_campos()
+
+    def remover_item(self):
+        produto = self.input_produto.get()
+        preco = self.input_preco.get()
+        quantidade = self.input_quantidade.get()
+        item = (produto, preco, quantidade)
+        if item in self.lista:
+            nova_quantidade = simpledialog.askinteger("Nova Quantidade", "Digite a nova quantidade:")
+            index = self.lista.index(item)
+            self.lista[index] = (produto, preco, nova_quantidade)
+            self.atualizar_lista()
+        if nova_quantidade == '0'   :
+                self.lista.remove(item)
+                self.atualizar_lista()
+                self.limpar_campos()
+        else:
+            print("O item especificado não está na lista.")
+            self.limpar_campos()
+
+    def atualizar_lista(self):
+        self.output_text.delete('1.0', tk.END)
+        for item in self.lista:
+            self.output_text.insert(tk.END, f"Produto: {item[0]}, Preço: {item[1]}, Quantidade: {item[2]}\n")
+        self.output_text.insert(tk.END, "\n")  # Adiciona uma linha em branco após listar os itens
+
+    def limpar_campos(self):
+        self.input_produto.delete(0, tk.END)
+        self.input_preco.delete(0, tk.END)
+        self.input_quantidade.delete(0, tk.END)
+
+def main():
+    root = tk.Tk()
+    app = ListaApp(root)
+    root.mainloop()
+
+if __name__ == "__main__":
+    main()
