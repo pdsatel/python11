@@ -3,6 +3,7 @@ from tkinter import ttk
 from tkinter import messagebox
 import random
 from tkinter import simpledialog
+import os
 
 class Sistema:
     def __init__(self, root, empresa):
@@ -22,15 +23,14 @@ class Sistema:
         self.botao_voltar.grid(row=5, column=0, columnspan=2, pady=5, sticky="ew")
         
     def voltar_menu_principal(self):
-        self.frame.destroy()   
-        super().voltar_menu_principal()
+        self.frame.destroy()    
         app = EmpresaPlanetasApp(self.root)
 class SistemaEstoque(Sistema):
     def __init__(self, root, empresa):
         super().__init__(root, empresa)
-        self.label_titulo.configure(text="Sistema estoque")
+        self.label_titulo.configure(text="Sistema de estoque ")
     
-    
+        
         self.master = root
         self.master.title("Lista de Compras")
         
@@ -68,6 +68,8 @@ class SistemaEstoque(Sistema):
         
         self.message_label = tk.Label(self.master, text='')
         self.message_label.pack()
+        
+    
         
     def adicionar_item(self):
         nova_quantidade = self.input_produto.get()
@@ -125,6 +127,61 @@ class SistemaCadastroClientes(Sistema):
     def __init__(self, root, empresa):
         super().__init__(root, empresa)
         self.label_titulo.configure(text="Sistema de Cadastro de Clientes")
+
+        self.master = root
+        self.master.title("Cadastro de cliente")
+
+        self.frame_cadastro_clientes = ttk.Frame(self.root, padding="10")
+        self.frame_cadastro_clientes.pack()
+
+        self.label_nome = ttk.Label(self.frame_cadastro_clientes, text="Nome:")
+        self.label_nome.grid(row=1, column=0, pady=5, sticky="w")
+
+        self.entry_nome = ttk.Entry(self.frame_cadastro_clientes)
+        self.entry_nome.grid(row=1, column=1, pady=5)
+
+        self.label_cpf = ttk.Label(self.frame_cadastro_clientes, text="CPF:")
+        self.label_cpf.grid(row=2, column=0, pady=5, sticky="w")
+
+        self.entry_cpf = ttk.Entry(self.frame_cadastro_clientes)
+        self.entry_cpf.grid(row=2, column=1, pady=5)
+
+        self.label_endereco = ttk.Label(self.frame_cadastro_clientes, text="Endereço:")
+        self.label_endereco.grid(row=3, column=0, pady=5, sticky="w")
+
+        self.entry_endereco = ttk.Entry(self.frame_cadastro_clientes)
+        self.entry_endereco.grid(row=3, column=1, pady=5)
+
+        self.label_telefone = ttk.Label(self.frame_cadastro_clientes, text="Telefone:")
+        self.label_telefone.grid(row=4, column=0, pady=5, sticky="w")
+
+        self.entry_telefone = ttk.Entry(self.frame_cadastro_clientes)
+        self.entry_telefone.grid(row=4, column=1, pady=5)
+
+        self.label_email = ttk.Label(self.frame_cadastro_clientes, text="E-mail:")
+        self.label_email.grid(row=5, column=0, pady=5, sticky="w")
+
+        self.entry_email = ttk.Entry(self.frame_cadastro_clientes)
+        self.entry_email.grid(row=5, column=1, pady=5)
+
+        self.botao_cadastrar_cliente = ttk.Button(self.frame_cadastro_clientes, text="Cadastrar Cliente", command=self.cadastrar_cliente)
+        self.botao_cadastrar_cliente.grid(row=6, column=0, pady=5)
+
+        self.botao_voltar = ttk.Button(self.frame_cadastro_clientes, text='Voltar Menu', command=self.voltar_menu_principal)
+        self.botao_voltar.grid(row=6, column=1, pady=5)
+
+    def cadastrar_cliente(self):
+        nome = self.entry_nome.get()
+        cpf = self.entry_cpf.get()
+        endereco = self.entry_endereco.get()
+        telefone = self.entry_telefone.get()
+        email = self.entry_email.get()
+        self.empresa.cadastrar_cliente(nome, cpf, endereco, telefone, email)
+
+            
+    
+    
+        
         
         # Aqui você pode adicionar os widgets específicos para o sistema de cadastro de clientes
 
@@ -132,14 +189,21 @@ class Loja(Sistema):
     def __init__(self, root, empresa):
         super().__init__(root, empresa)
         self.label_titulo.configure(text="Loja de Planetas")
+class Cliente:
+    def __init__(self, nome, cpf, endereco, telefone, email):
+        self.nome = nome
+        self.cpf = cpf
+        self.endereco = endereco
+        self.telefone = telefone
+        self.email = email
+        self.numero_cadastro = None
+        self.voucher = None
+
         
-        # Aqui você pode adicionar os widgets específicos para a loja
+       
 
 class EmpresaPlanetasApp:
     def __init__(self, root):
-        
-        
-        
         self.root = root
         self.root.title("Empresa de Planetas")
         
@@ -161,8 +225,16 @@ class EmpresaPlanetasApp:
         self.botao_escolher_loja = ttk.Button(self.frame, text="Loja", command=self.abrir_loja)
         self.botao_escolher_loja.grid(row=3, column=0, columnspan=2, pady=5, sticky="ew")
         
+        self.botao_escolher_lista=ttk.Button(self.frame, text='Lista de clientes',command=self.clientes)
+        self.botao_escolher_lista.grid(row=3,column=0, columnspan=2, pady=5 ,sticky='ew')
+        
         self.botao_sair = ttk.Button(self.frame, text="Sair", command=self.root.quit)
-        self.botao_sair.grid(row=4, column=0, columnspan=2, pady=5, sticky="ew")
+        self.botao_sair.grid(row=4, column=0, columnspan=2, pady=5, sticky="ew") 
+        
+        
+    def clientes(self):
+        self.frame.destroy()
+        self.cadastrar_cliente = Cliente(self.root, self.empresa)
         
     def abrir_sistema_estoque(self):
         self.frame.destroy()
@@ -176,19 +248,24 @@ class EmpresaPlanetasApp:
         self.frame.destroy()
         self.loja = Loja(self.root, self.empresa)
 
+
 class EmpresaPlanetas:
     def __init__(self):
         self.clientes = []
-        self.itens_estoque = []
         self.numero_cadastro_atual = 1
-        self.codigo_item_atual = 1
 
-    def cadastrar_cliente(self, nome, cpf, endereco, telefone, email):
-        cliente = cliente(nome, cpf, endereco, telefone, email)
-        cliente.numero_cadastro = self.numero_cadastro_atual
-        self.numero_cadastro_atual += 1
-        cliente.voucher = self.gerar_voucher()
-        self.clientes.append(cliente)
+    def cadastrar_cliente(self,):
+        nome = self.entry_nome.get()
+        cpf = self.entry_cpf.get()
+        endereco = self.entry_endereco.get()
+        telefone = self.entry_telefone.get()
+        email = self.entry_email.get()
+        if nome and cpf and endereco and telefone and email:
+            # Chamar o método de cadastro da empresa
+            self.empresa.cadastrar_cliente(nome, cpf, endereco, telefone, email)
+            messagebox.showinfo("Sucesso", "Cliente cadastrado com sucesso!")
+        else:
+            messagebox.showerror("Erro", "Por favor, preencha todos os campos.")
 
     def gerar_voucher(self):
         caracteres = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
@@ -196,6 +273,34 @@ class EmpresaPlanetas:
         desconto = random.randint(5, 20)
         return f"{voucher} - {desconto}% de desconto"
 
+    def listar_clientes(self):
+        if not self.clientes:
+            return "Não há clientes cadastrados."
+        texto = ""
+        for cliente in self.clientes:
+            texto += f"Número de Cadastro: {cliente.numero_cadastro}\n"
+            texto += f"Nome: {cliente.nome}\n"
+            texto += f"CPF: {cliente.cpf}\n"
+            texto += f"Endereço: {cliente.endereco}\n"
+            texto += f"Telefone: {cliente.telefone}\n"
+            texto += f"E-mail: {cliente.email}\n"
+            texto += f"Voucher: {cliente.voucher}\n\n"
+        return texto
+
+    def atualizar_cliente(self, numero_cadastro, **kwargs):
+        for cliente in self.clientes:
+            if cliente.numero_cadastro == numero_cadastro:
+                for key, value in kwargs.items():
+                    setattr(cliente, key, value)
+                return "Informações do cliente atualizadas com sucesso."
+        return "Cliente não encontrado."
+
+    def remover_cliente(self, numero_cadastro):
+        for cliente in self.clientes:
+            if cliente.numero_cadastro == numero_cadastro:
+                self.clientes.remove(cliente)
+                return "Cliente removido com sucesso."
+        return "Cliente não encontrado."
 def main():
     
     root = tk.Tk()
