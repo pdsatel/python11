@@ -1,0 +1,441 @@
+import tkinter as tk
+from tkinter import ttk
+from tkinter import messagebox
+import random
+from tkinter import simpledialog
+import os
+
+def clear_scream():
+        if os.name =='nt':
+                os.system('cls')
+        else:
+               os.system('clear')
+
+class Sistema:
+    def __init__(self, root, empresa):
+        self.root = root
+        self.root.title("Sistema")
+        
+        self.frame = ttk.Frame(self.root, padding="10")
+        self.frame.pack()
+        
+        self.empresa = empresa
+        
+        # Widgets
+        self.label_titulo = ttk.Label(self.frame, text="Sistema")
+        self.label_titulo.grid(row=0, column=0, columnspan=2, pady=5)
+        
+    
+        
+    def voltar_menu_principal(self):
+        self.root.destroy()
+        
+class SistemaEstoque(Sistema):
+    def __init__(self, root, empresa):
+        super().__init__(root, empresa)
+        self.label_titulo.configure(text="Sistema de estoque ")
+    
+        
+        self.master = root
+        self.master.title("Lista de Compras")
+        
+        self.lista=[]
+        
+        self.label_produto = tk.Label(self.master, text='Adicionar produtos')
+        self.label_produto.pack()
+        
+        self.input_produto = tk.Entry(self.master)
+        self.input_produto.pack()
+        self.input_produto.bind('<Return>', lambda event: self.input_preco.focus())
+        
+        self.label_preco = tk.Label(self.master, text='Preço do produto')
+        self.label_preco.pack()
+        
+        self.input_preco = tk.Entry(self.master)
+        self.input_preco.pack()
+        self.input_preco.bind('<Return>', lambda event: self.input_quantidade.focus())
+        
+        self.label_quantidade = tk.Label(self.master, text='Adicione a quantidade')
+        self.label_quantidade.pack()
+        
+        self.input_quantidade = tk.Entry(self.master)
+        self.input_quantidade.pack()
+        self.input_quantidade.bind('<Return>', lambda event: self.adicionar_item())
+        
+        self.adicionar_button = tk.Button(self.master, text='Adicionar item', command=self.adicionar_item)
+        self.adicionar_button.pack()
+        
+        self.remover_button = tk.Button(self.master, text='Remover item', command=self.remover_item)
+        self.remover_button.pack()
+        
+        self.output_text = tk.Text(self.master, height=10, width=50)
+        self.output_text.pack()
+        
+        self.voltar_button = tk.Button(self.master, text='Voltar ao menu', command=self.voltar_menu_principal)
+        self.voltar_button.pack()
+    
+        
+       
+        
+        self.message_label = tk.Label(self.master, text='')
+        self.message_label.pack()
+
+    
+        
+    def adicionar_item(self):
+        nova_quantidade = self.input_produto.get()
+        produto = self.input_produto.get()
+        preco = self.input_preco.get()
+        quantidade = self.input_quantidade.get()
+        if produto and preco and quantidade and nova_quantidade:
+            item = (produto, preco, quantidade)
+            if item in self.lista:
+                self.message_label.config(text="O item já está na lista.")
+            else:
+                self.lista.append(item)         
+                self.atualizar_lista()
+                self.limpar_campos()
+        
+ 
+
+
+    def remover_item(self):
+     produto = self.input_produto.get()
+     preco = self.input_preco.get()
+     quantidade = self.input_quantidade.get()
+     item = (produto, preco, quantidade)
+
+     for index, item_lista in enumerate(self.lista):
+        if item_lista[:2] == (produto, preco):
+            nova_quantidade = simpledialog.askinteger("Nova Quantidade", "Digite a nova quantidade:")
+            if nova_quantidade is not None:  # Verifica se o usuário não cancelou a caixa de diálogo
+                if nova_quantidade == 0:
+                    # Se a nova quantidade for zero, remove o item da lista
+                    del self.lista[index]
+                else:
+                    # Atualiza a quantidade do item na lista
+                    self.lista[index] = (produto, preco, nova_quantidade)
+                self.atualizar_lista()
+                self.limpar_campos()
+                return
+     self.message_label.config(text='O item não está na lista.')
+
+
+
+
+    def atualizar_lista(self):
+            self.output_text.delete('1.0', tk.END)
+            for index in self.lista:
+             self.output_text.insert(tk.END, f"Produto: {index[0]}, Preço: {index[1]}, Quantidade: {index[2]}\n")
+            self.output_text.insert(tk.END, "\n")
+    def limpar_campos(self):
+             self.input_produto.delete(0, tk.END)
+             self.input_preco.delete(0, tk.END)
+             self.input_quantidade.delete(0, tk.END)
+       
+
+class SistemaCadastroClientes(Sistema):
+    def __init__(self, root, empresa):
+        super().__init__(root, empresa)
+        self.label_titulo.configure(text="Sistema de Cadastro de Clientes")
+
+        self.master = root
+        self.master.title("Cadastro de cliente")
+
+        self.frame_cadastro_clientes = ttk.Frame(self.root, padding="10")
+        self.frame_cadastro_clientes.pack()
+
+        self.label_nome = ttk.Label(self.frame_cadastro_clientes, text="Nome:")
+        self.label_nome.grid(row=1, column=0, pady=5, sticky="w")
+
+        self.entry_nome = ttk.Entry(self.frame_cadastro_clientes)
+        self.entry_nome.grid(row=1, column=1, pady=5)
+
+        self.label_cpf = ttk.Label(self.frame_cadastro_clientes, text="CPF:")
+        self.label_cpf.grid(row=2, column=0, pady=5, sticky="w")
+
+        self.entry_cpf = ttk.Entry(self.frame_cadastro_clientes)
+        self.entry_cpf.grid(row=2, column=1, pady=5)
+
+        self.label_endereco = ttk.Label(self.frame_cadastro_clientes, text="Endereço:")
+        self.label_endereco.grid(row=3, column=0, pady=5, sticky="w")
+
+        self.entry_endereco = ttk.Entry(self.frame_cadastro_clientes)
+        self.entry_endereco.grid(row=3, column=1, pady=5)
+
+        self.label_telefone = ttk.Label(self.frame_cadastro_clientes, text="Telefone:")
+        self.label_telefone.grid(row=4, column=0, pady=5, sticky="w")
+
+        self.entry_telefone = ttk.Entry(self.frame_cadastro_clientes)
+        self.entry_telefone.grid(row=4, column=1, pady=5)
+
+        self.label_email = ttk.Label(self.frame_cadastro_clientes, text="E-mail:")
+        self.label_email.grid(row=5, column=0, pady=5, sticky="w")
+
+        self.entry_email = ttk.Entry(self.frame_cadastro_clientes)
+        self.entry_email.grid(row=5, column=1, pady=5)
+
+        self.botao_cadastrar_cliente = ttk.Button(self.frame_cadastro_clientes, text="Cadastrar Cliente", command=self.cadastrar_cliente)
+        self.botao_cadastrar_cliente.grid(row=6, column=0, pady=5)
+
+        self.botao_voltar = ttk.Button(self.frame_cadastro_clientes, text='Voltar Menu', command=self.voltar_menu_principal)
+        self.botao_voltar.grid(row=6, column=1, pady=5)
+
+    def carregar_informacoes(self):
+        try:
+            with open("estoque.txt", "r") as arquivo:
+                for linha in arquivo:
+                    produto, preco, quantidade = linha.strip().split(",")
+                    self.lista.append((produto, preco, quantidade))
+            self.atualizar_lista()
+        except FileNotFoundError:
+            # Se o arquivo não existir, não há nada a carregar
+            pass
+    
+    def salvar_informacoes(self):
+        with open("estoque.txt", "w") as arquivo:
+            for produto, preco, quantidade in self.lista:
+                arquivo.write(f"{produto},{preco},{quantidade}\n")
+        # Fechar a janela
+        self.master.destroy()
+    
+
+    def cadastrar_cliente(self):
+        nome = self.entry_nome.get()
+        cpf = self.entry_cpf.get()
+        endereco = self.entry_endereco.get()
+        telefone = self.entry_telefone.get()
+        email = self.entry_email.get()
+        self.empresa.cadastrar_cliente(nome, cpf, endereco, telefone, email)
+
+            
+    
+    
+        
+        
+        # Aqui você pode adicionar os widgets específicos para o sistema de cadastro de clientes
+
+class Loja(Sistema):
+    def __init__(self, root, empresa):
+        super().__init__(root, empresa)
+        self.label_titulo.configure(text="Loja de Planetas")
+class Cliente:
+    def __init__(self, nome, cpf, endereco, telefone, email):
+        self.nome = nome
+        self.cpf = cpf
+        self.endereco = endereco
+        self.telefone = telefone
+        self.email = email
+        self.numero_cadastro = None
+        self.voucher = None
+
+class EmpresaPlanetasApp:
+    def __init__(self, root):
+        style = Style(theme='darkly')
+        self.root = root
+        self.root.title("Empresa de Planetas")
+        
+        self.frame = ttk.Frame(self.root, padding="10")
+        self.frame.pack()
+        
+        self.empresa = EmpresaPlanetas()
+        
+        self.label_menu = ttk.Label(self.frame, text="Menu:")
+        self.label_menu.grid(row=0, column=0, columnspan=2, sticky="w", pady=5)
+        
+        self.botao_cadastrar = ttk.Button(self.frame, text="Cadastrar novo cliente", command=self.cadastrar_cliente)
+        self.botao_cadastrar.grid(row=1, column=0, columnspan=2, pady=5, sticky="ew")
+        
+        self.botao_listar = ttk.Button(self.frame, text="Listar clientes", command=self.listar_clientes)
+        self.botao_listar.grid(row=2, column=0, columnspan=2, pady=5, sticky="ew")
+        
+        self.botao_atualizar = ttk.Button(self.frame, text="Atualizar informações de um cliente", command=self.atualizar_cliente)
+        self.botao_atualizar.grid(row=3, column=0, columnspan=2, pady=5, sticky="ew")
+        
+        self.botao_remover = ttk.Button(self.frame, text="Remover um cliente", command=self.remover_cliente)
+        self.botao_remover.grid(row=4, column=0, columnspan=2, pady=5, sticky="ew")
+        
+        self.botao_sair = ttk.Button(self.frame, text="Sair",bootstyle=DANGER, command=self.root.quit)
+        self.botao_sair.grid(row=5, column=0, columnspan=2, pady=5, sticky="ew")
+        
+    def cadastrar_cliente(self):
+        self.cadastro_cliente_window = tk.Toplevel(self.root)
+        self.cadastro_cliente_window.title("Cadastrar Cliente")
+        
+        self.frame_cadastro = ttk.Frame(self.cadastro_cliente_window, padding="10")
+        self.frame_cadastro.pack()
+        
+
+        ttk.Label(self.frame_cadastro, text="Nome:").grid(row=0, column=0, sticky="w", padx=5, pady=2)
+        self.nome_entry = ttk.Entry(self.frame_cadastro)
+        self.nome_entry.grid(row=0, column=1, padx=5, pady=2)
+        
+        ttk.Label(self.frame_cadastro, text="CPF:").grid(row=1, column=0, sticky="w", padx=5, pady=2)
+        self.cpf_entry = ttk.Entry(self.frame_cadastro)
+        self.cpf_entry.grid(row=1, column=1, padx=5, pady=2)
+        
+        ttk.Label(self.frame_cadastro, text="Endereço:").grid(row=2, column=0, sticky="w", padx=5, pady=2)
+        self.endereco_entry = ttk.Entry(self.frame_cadastro)
+        self.endereco_entry.grid(row=2, column=1, padx=5, pady=2)
+        
+        ttk.Label(self.frame_cadastro, text="Telefone:").grid(row=3, column=0, sticky="w", padx=5, pady=2)
+        self.telefone_entry = ttk.Entry(self.frame_cadastro)
+        self.telefone_entry.grid(row=3, column=1, padx=5, pady=2)
+        
+        ttk.Label(self.frame_cadastro, text="E-mail:").grid(row=4, column=0, sticky="w", padx=5, pady=2)
+        self.email_entry = ttk.Entry(self.frame_cadastro)
+        self.email_entry.grid(row=4, column=1, padx=5, pady=2)
+        
+        self.botao_confirmar = ttk.Button(self.frame_cadastro, text="Confirmar", command=self.realizar_cadastro, bootstyle=SUCCESS)
+        self.botao_confirmar.grid(row=5, column=0, columnspan=2, pady=5)
+        
+    def realizar_cadastro(self):
+        nome = self.nome_entry.get()
+        cpf = self.cpf_entry.get()
+        endereco = self.endereco_entry.get()
+        telefone = self.telefone_entry.get()
+        email = self.email_entry.get()
+        self.empresa.cadastrar_cliente(nome, cpf, endereco, telefone, email)
+        messagebox.showinfo("Cadastro Realizado", "Cliente cadastrado com sucesso.")
+        self.cadastro_cliente_window.destroy()
+    
+    def listar_clientes(self):
+        self.listar_clientes_window = tk.Toplevel(self.root)
+        self.listar_clientes_window.title("Lista de Clientes")
+        
+        self.frame_lista_clientes = ttk.Frame(self.listar_clientes_window, padding="10")
+        self.frame_lista_clientes.pack()
+        
+        texto = ""
+        for cliente in self.empresa.clientes:
+            texto += f"Número de Cadastro: {cliente.numero_cadastro}\n"
+            texto += f"Nome: {cliente.nome}\n"
+            texto += f"CPF: {cliente.cpf}\n"
+            texto += f"Endereço: {cliente.endereco}\n"
+            texto += f"Telefone: {cliente.telefone}\n"
+            texto += f"E-mail: {cliente.email}\n"
+            texto += f"Voucher: {cliente.voucher}\n\n"
+        
+        self.label_lista_clientes = ttk.Label(self.frame_lista_clientes, text=texto)
+        self.label_lista_clientes.pack()
+    
+    def atualizar_cliente(self):
+        self.atualizar_cliente_window = tk.Toplevel(self.root)
+        self.atualizar_cliente_window.title("Atualizar Cliente")
+        
+        self.frame_atualizar_cliente = ttk.Frame(self.atualizar_cliente_window, padding="10")
+        self.frame_atualizar_cliente.pack()
+        ttk.Label(self.frame_atualizar_cliente, text="Número de Cadastro do Cliente:").grid(row=0, column=0, sticky="w", padx=5, pady=2)
+        self.numero_cadastro_entry = ttk.Entry(self.frame_atualizar_cliente)
+        self.numero_cadastro_entry.grid(row=0, column=1, padx=5, pady=2)
+        
+        ttk.Label(self.frame_atualizar_cliente, text="Novo Nome (Deixe em branco para manter o mesmo):").grid(row=1, column=0, sticky="w", padx=5, pady=2)
+        self.novo_nome_entry = ttk.Entry(self.frame_atualizar_cliente)
+        self.novo_nome_entry.grid(row=1, column=1, padx=5, pady=2)
+        
+        ttk.Label(self.frame_atualizar_cliente, text="Novo CPF (Deixe em branco para manter o mesmo):").grid(row=2, column=0, sticky="w", padx=5, pady=2)
+        self.novo_cpf_entry = ttk.Entry(self.frame_atualizar_cliente)
+        self.novo_cpf_entry.grid(row=2, column=1, padx=5, pady=2)
+        
+        ttk.Label(self.frame_atualizar_cliente, text="Novo Endereço (Deixe em branco para manter o mesmo):").grid(row=3, column=0, sticky="w", padx=5, pady=2)
+        self.novo_endereco_entry = ttk.Entry(self.frame_atualizar_cliente)
+        self.novo_endereco_entry.grid(row=3, column=1, padx=5, pady=2)
+        
+        ttk.Label(self.frame_atualizar_cliente, text="Novo Telefone (Deixe em branco para manter o mesmo):").grid(row=4, column=0, sticky="w", padx=5, pady=2)
+        self.novo_telefone_entry = ttk.Entry(self.frame_atualizar_cliente)
+        self.novo_telefone_entry.grid(row=4, column=1, padx=5, pady=2)
+        
+        ttk.Label(self.frame_atualizar_cliente, text="Novo E-mail (Deixe em branco para manter o mesmo):").grid(row=5, column=0, sticky="w", padx=5, pady=2)
+        self.novo_email_entry = ttk.Entry(self.frame_atualizar_cliente)
+        self.novo_email_entry.grid(row=5, column=1, padx=5, pady=2)
+        
+        self.botao_confirmar_atualizacao = ttk.Button(self.frame_atualizar_cliente, text="Confirmar",bootstyle=SUCCESS, command=self.realizar_atualizacao,)
+        self.botao_confirmar_atualizacao.grid(row=6, column=0, columnspan=2, pady=5)
+    
+    def realizar_atualizacao(self):
+        numero_cadastro = int(self.numero_cadastro_entry.get())
+        novo_nome = self.novo_nome_entry.get()
+        novo_cpf = self.novo_cpf_entry.get()
+        novo_endereco = self.novo_endereco_entry.get()
+        novo_telefone = self.novo_telefone_entry.get()
+        novo_email = self.novo_email_entry.get()
+        self.empresa.atualizar_cliente(numero_cadastro, nome=novo_nome, cpf=novo_cpf, endereco=novo_endereco, telefone=novo_telefone, email=novo_email)
+        messagebox.showinfo("Atualização Realizada", "Informações do cliente atualizadas com sucesso.")
+        self.atualizar_cliente_window.destroy()
+    
+    def remover_cliente(self):
+        self.remover_cliente_window = tk.Toplevel(self.root)
+        self.remover_cliente_window.title("Remover Cliente")
+        
+        self.frame_remover_cliente = ttk.Frame(self.remover_cliente_window, padding="10")
+        self.frame_remover_cliente.pack()
+        ttk.Label(self.frame_remover_cliente, text="Número de Cadastro do Cliente:").grid(row=0, column=0, sticky="w", padx=5, pady=2)
+        self.numero_cadastro_remover_entry = ttk.Entry(self.frame_remover_cliente)
+        self.numero_cadastro_remover_entry.grid(row=0, column=1, padx=5, pady=2)
+        
+        self.botao_confirmar_remocao = ttk.Button(self.frame_remover_cliente, text="Confirmar", command=self.realizar_remocao, bootstyle=SUCCESS)
+        self.botao_confirmar_remocao.grid(row=1, column=0, columnspan=2, pady=5)
+    
+    def realizar_remocao(self):
+        numero_cadastro = int(self.numero_cadastro_remover_entry.get())
+        self.empresa.remover_cliente(numero_cadastro)
+        messagebox.showinfo("Remoção Realizada", "Cliente removido com sucesso.")
+        self.remover_cliente_window.destroy()
+
+class EmpresaPlanetas:
+    def __init__(self):
+        self.clientes = []
+        self.numero_cadastro_atual = 1
+
+    def cadastrar_cliente(self, nome, cpf, endereco, telefone, email):
+        cliente = Cliente(nome, cpf, endereco, telefone, email)
+        cliente.numero_cadastro = self.numero_cadastro_atual
+        self.numero_cadastro_atual += 1
+        cliente.voucher = self.gerar_voucher()
+        self.clientes.append(cliente)
+
+    def gerar_voucher(self):
+        caracteres = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
+        voucher = ''.join(random.choices(caracteres, k=6))
+        desconto = random.randint(5, 20)
+        return f"{voucher} - {desconto}% de desconto"
+
+    def listar_clientes(self):
+        if not self.clientes:
+            return "Não há clientes cadastrados."
+        texto = ""
+        for cliente in self.clientes:
+            texto += f"Número de Cadastro: {cliente.numero_cadastro}\n"
+            texto += f"Nome: {cliente.nome}\n"
+            texto += f"CPF: {cliente.cpf}\n"
+            texto += f"Endereço: {cliente.endereco}\n"
+            texto += f"Telefone: {cliente.telefone}\n"
+            texto += f"E-mail: {cliente.email}\n"
+            texto += f"Voucher: {cliente.voucher}\n\n"
+        return texto
+
+    def atualizar_cliente(self, numero_cadastro, **kwargs):
+        for cliente in self.clientes:
+            if cliente.numero_cadastro == numero_cadastro:
+                for key, value in kwargs.items():
+                    setattr(cliente, key, value)
+                return "Informações do cliente atualizadas com sucesso."
+        return "Cliente não encontrado."
+
+    def remover_cliente(self, numero_cadastro):
+        for cliente in self.clientes:
+            if cliente.numero_cadastro == numero_cadastro:
+                self.clientes.remove(cliente)
+                return "Cliente removido com sucesso."
+        return "Cliente não encontrado."
+    
+    
+    
+def main():
+    
+    root = tk.Tk()
+    app = EmpresaPlanetasApp(root)
+    root.mainloop()
+
+if __name__ == "__main__":
+    main()
