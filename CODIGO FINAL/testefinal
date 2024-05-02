@@ -262,109 +262,92 @@ class EmpresaPlanetas:
                 return "Cliente removido com sucesso."
         return "Cliente não encontrado."
     
-class SistemaEstoque(Sistema):
+class SistemaEstoque:
     def __init__(self, root, empresa):
-        super().__init__(root, empresa)
-        self.label_titulo.configure(text="Sistema de estoque ")
-    
+        self.root = root
+        self.root.title("Lista de Compras")
         
-        self.master = root
-        self.master.title("Lista de Compras")
+        # Itens pré-definidos
+        self.itens = {
+            "Mercúrio": {"preco": 57.9},
+            "Vênus": {"preco": 108.2},
+            "Terra": {"preco": 149.6},
+            "Marte": {"preco": 227.9},
+            "Júpiter": {"preco": 778.6},
+            "Saturno": {"preco": 1433.5},
+            "Urano": {"preco": 2872.5},
+            "Netuno": {"preco": 4495.1}
+        }
         
-        self.lista=[] 
+        self.itens_selecionados = {}
         
-        self.label_produto = tk.Label(self.master, text='Adicionar produtos')
+        self.label_produto = tk.Label(self.root, text='Selecione o produto:')
         self.label_produto.pack()
         
-        self.input_produto = tk.Entry(self.master)
-        self.input_produto.pack()
-        self.input_produto.bind('<Return>', lambda event: self.input_preco.focus())
-        
-        self.label_preco = tk.Label(self.master, text='Preço do produto')
-        self.label_preco.pack()
-        
-        self.input_preco = tk.Entry(self.master)
-        self.input_preco.pack()
-        self.input_preco.bind('<Return>', lambda event: self.input_quantidade.focus())
-        
-        self.label_quantidade = tk.Label(self.master, text='Adicione a quantidade')
+        self.opcao_produto = tk.StringVar(self.root)
+        self.opcao_produto.set(next(iter(self.itens)))  # Define o primeiro item como padrão
+        self.menu_produto = tk.OptionMenu(self.root, self.opcao_produto, *self.itens.keys())
+        self.menu_produto.pack()
+
+        self.label_quantidade = tk.Label(self.root, text='Adicione a quantidade:')
         self.label_quantidade.pack()
         
-        self.input_quantidade = tk.Entry(self.master)
+        self.input_quantidade = tk.Entry(self.root)
         self.input_quantidade.pack()
         self.input_quantidade.bind('<Return>', lambda event: self.adicionar_item())
         
-        self.adicionar_button = tk.Button(self.master, text='Adicionar item', command=self.adicionar_item, bg='green')
+        self.adicionar_button = tk.Button(self.root, text='Adicionar item', command=self.adicionar_item, bg='green')
         self.adicionar_button.pack()
 
-        self.remover_button = tk.Button(self.master, text='Remover Qtd item', command=self.remover_item, bg='red')
+        self.remover_button = tk.Button(self.root, text='Remover Qtd item', command=self.remover_item, bg='red')
         self.remover_button.pack()
 
-        
-        self.output_text = tk.Text(self.master, height=10, width=50)
+        self.output_text = tk.Text(self.root, height=10, width=50)
         self.output_text.pack()
         
-        self.voltar_button = tk.Button(self.master, text='Voltar ao menu', command=self.voltar_menu_principal)
+        self.voltar_button = tk.Button(self.root, text='Voltar ao menu', command=self.voltar_menu_principal)
         self.voltar_button.pack()
       
-        self.message_label = tk.Label(self.master, text='')
+        self.message_label = tk.Label(self.root, text='')
         self.message_label.pack()
-        
-    def adicionar_item(self):
-        nova_quantidade = self.input_produto.get()
-        produto = self.input_produto.get()
-        preco = self.input_preco.get()
-        quantidade = self.input_quantidade.get()
-        if produto and preco and quantidade and nova_quantidade:
-            item = (produto, preco, quantidade)
-            if item in self.lista:
-                self.message_label.config(text="O item já está na lista.")
-            else:
-                self.lista.append(item)         
-                self.atualizar_lista()
-                self.limpar_campos()
-        
- 
 
+    def adicionar_item(self):
+        produto = self.opcao_produto.get()
+        quantidade = self.input_quantidade.get()
+        if produto and quantidade:
+            if produto in self.itens_selecionados:
+                self.itens_selecionados[produto]['quantidade'] += int(quantidade)
+            else:
+                self.itens_selecionados[produto] = {'preco': self.itens[produto]['preco'], 'quantidade': int(quantidade)}
+            self.atualizar_lista()
+            self.limpar_campos()
+        else:
+            self.message_label.config(text='Preencha todos os campos.')
 
     def remover_item(self):
-     produto = self.input_produto.get()
-     preco = self.input_preco.get()
-     quantidade = self.input_quantidade.get()
-     item = (produto, preco, quantidade)
-
-     for index, item_lista in enumerate(self.lista):
-        if item_lista[:2] == (produto, preco):
-            nova_quantidade = simpledialog.askinteger("Nova Quantidade", "Digite a nova quantidade:")
-            if nova_quantidade is not None:  # Verifica se o usuário não cancelou a caixa de diálogo
-                if nova_quantidade == 0:
-                    # Se a nova quantidade for zero, remove o item da lista
-                    del self.lista[index]
-                else:
-                    # Atualiza a quantidade do item na lista
-                    self.lista[index] = (produto, preco, nova_quantidade)
+        produto = self.opcao_produto.get()
+        if produto in self.itens_selecionados:
+            nova_quantidade = int(self.input_quantidade.get())
+            if nova_quantidade <= self.itens_selecionados[produto]['quantidade']:
+                self.itens_selecionados[produto]['quantidade'] -= nova_quantidade
+                if self.itens_selecionados[produto]['quantidade'] == 0:
+                    del self.itens_selecionados[produto]
                 self.atualizar_lista()
                 self.limpar_campos()
-                return
-     self.message_label.config(text='O item não está na lista.')
-
-
-
+            else:
+                self.message_label.config(text='Quantidade a ser removida maior que a quantidade atual.')
+        else:
+            self.message_label.config(text='O item não está na lista.')
 
     def atualizar_lista(self):
-            self.output_text.delete('1.0', tk.END)
-            for index in self.lista:
-             self.output_text.insert(tk.END, f"Produto: {index[0]}, Preço: {index[1]}, Quantidade: {index[2]}\n")
-            self.output_text.insert(tk.END, "\n")
+        self.output_text.delete('1.0', tk.END)
+        for produto, info in self.itens_selecionados.items():
+            self.output_text.insert(tk.END, f"Produto: {produto}, Preço: {info['preco']}, Quantidade: {info['quantidade']}\n")
+        self.output_text.insert(tk.END, "\n")
+
     def limpar_campos(self):
-             self.input_produto.delete(0, tk.END)
-             self.input_preco.delete(0, tk.END)
-             self.input_quantidade.delete(0, tk.END)  
-             self.nome_entry.delete(0, tk.END)
-             self.cpf_entry.delete(0, tk.END)
-             self.endereco_entry.delete(0, tk.END)
-             self.telefone_entry.delete(0, tk.END)
-             self.email_entry.delete(0, tk.END)  
+        self.opcao_produto.set(next(iter(self.itens)))  # Define o primeiro item como padrão
+        self.input_quantidade.delete(0, tk.END)
                  
              
 dados_planetas = [
