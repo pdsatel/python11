@@ -23,6 +23,7 @@ class Sistema:
         
     def voltar_menu_principal(self):
      self.root.destroy()
+     app=EmpresaPlanetasApp
            
 
 
@@ -266,89 +267,50 @@ class SistemaEstoque:
     def __init__(self, root, empresa):
         self.root = root
         self.root.title("Lista de Compras")
+     
         
-        # Itens pré-definidos
         self.itens = {
-            "Mercúrio": {"preco": 57.9},
-            "Vênus": {"preco": 108.2},
-            "Terra": {"preco": 149.6},
-            "Marte": {"preco": 227.9},
-            "Júpiter": {"preco": 778.6},
-            "Saturno": {"preco": 1433.5},
-            "Urano": {"preco": 2872.5},
-            "Netuno": {"preco": 4495.1}
+            "Mercúrio":{"preco": 100.00,'quantidade': 10},
+            "Vênus":{"preco": 100.00, 'quantidade': 10},
+            "Terra":{"preco": 100.0, 'quantidade': 10},
+            "Marte":{"preco": 100.0, 'quantidade': 10},
+          "Júpiter":{"preco": 100.0, 'quantidade': 10},
+            "Saturno":{"preco":100.0,'quantidade': 10},
+            "Urano":{"preco": 100.0, 'quantidade': 10},
+            "Netuno":{"preco": 100.0, 'quantidade': 10},
         }
         
-        self.itens_selecionados = {}
+        self.label_lista_itens = tk.Label(self.root, text='Lista de Itens:', font=('Arial', 16, 'bold'), bg='#f0f0f0')
+        self.label_lista_itens.pack(pady=10)  # Adicionando margem
         
-        self.label_produto = tk.Label(self.root, text='Selecione o produto:')
-        self.label_produto.pack()
+        self.output_text = tk.Text(self.root, height=10, width=50, bg='#ffffff', fg='#333333', font=('Arial', 12))
+        self.output_text.pack(padx=10, pady=5)  # Adicionando margem
         
-        self.opcao_produto = tk.StringVar(self.root)
-        self.opcao_produto.set(next(iter(self.itens)))  # Define o primeiro item como padrão
-        self.menu_produto = tk.OptionMenu(self.root, self.opcao_produto, *self.itens.keys())
-        self.menu_produto.pack()
-
-        self.label_quantidade = tk.Label(self.root, text='Adicione a quantidade:')
-        self.label_quantidade.pack()
+        self.atualizar_lista()
         
-        self.input_quantidade = tk.Entry(self.root)
-        self.input_quantidade.pack()
-        self.input_quantidade.bind('<Return>', lambda event: self.adicionar_item())
-        
-        self.adicionar_button = tk.Button(self.root, text='Adicionar item', command=self.adicionar_item, bg='green')
-        self.adicionar_button.pack()
-
-        self.remover_button = tk.Button(self.root, text='Remover Qtd item', command=self.remover_item, bg='red')
-        self.remover_button.pack()
-
-        self.output_text = tk.Text(self.root, height=10, width=50)
-        self.output_text.pack()
-        
-        self.voltar_button = tk.Button(self.root, text='Voltar ao menu', command=self.voltar_menu_principal)
-        self.voltar_button.pack()
-      
-        self.message_label = tk.Label(self.root, text='')
-        self.message_label.pack()
-
-    def adicionar_item(self):
-        produto = self.opcao_produto.get()
-        quantidade = self.input_quantidade.get()
-        if produto and quantidade:
-            if produto in self.itens_selecionados:
-                self.itens_selecionados[produto]['quantidade'] += int(quantidade)
-            else:
-                self.itens_selecionados[produto] = {'preco': self.itens[produto]['preco'], 'quantidade': int(quantidade)}
-            self.atualizar_lista()
-            self.limpar_campos()
-        else:
-            self.message_label.config(text='Preencha todos os campos.')
-
-    def remover_item(self):
-        produto = self.opcao_produto.get()
-        if produto in self.itens_selecionados:
-            nova_quantidade = int(self.input_quantidade.get())
-            if nova_quantidade <= self.itens_selecionados[produto]['quantidade']:
-                self.itens_selecionados[produto]['quantidade'] -= nova_quantidade
-                if self.itens_selecionados[produto]['quantidade'] == 0:
-                    del self.itens_selecionados[produto]
-                self.atualizar_lista()
-                self.limpar_campos()
-            else:
-                self.message_label.config(text='Quantidade a ser removida maior que a quantidade atual.')
-        else:
-            self.message_label.config(text='O item não está na lista.')
+        self.voltar_button = tk.Button(self.root, text='Voltar ao menu', command=self.voltar_menu_principal, bg='#4CAF50', fg='#ffffff', font=('Arial', 12))
+        self.voltar_button.pack(pady=10)  # Adicionando margem
 
     def atualizar_lista(self):
         self.output_text.delete('1.0', tk.END)
-        for produto, info in self.itens_selecionados.items():
-            self.output_text.insert(tk.END, f"Produto: {produto}, Preço: {info['preco']}, Quantidade: {info['quantidade']}\n")
+        for produto, info in self.itens.items():
+            # Adicionando espaços extras entre as informações
+            self.output_text.insert(tk.END, f"Produto: {produto:<10} | Preço: R${info['preco']:<7} |Quantidade: {info['quantidade']}\n")
         self.output_text.insert(tk.END, "\n")
+
+    def voltar_menu_principal(self):
+        # Aqui você pode implementar a função para voltar ao menu principal
+        pass
 
     def limpar_campos(self):
         self.opcao_produto.set(next(iter(self.itens)))  # Define o primeiro item como padrão
         self.input_quantidade.delete(0, tk.END)
-                 
+        self.message_label.config(text='')
+
+    def voltar_menu_principal(self):
+         self.frame.destroy()   
+         app=EmpresaPlanetasApp()  
+            
              
 dados_planetas = [
     ("Mercúrio", 57.9, 4879, 3.3e23),
@@ -371,6 +333,9 @@ dados_planetas = [
     ("Urano", 2872.5, 50724, 8.7e25),
     ("Netuno", 4495.1, 49244, 1.0e26),
 ]
+def registrar_venda(planeta, quantidade):
+    with open("vendas.txt", "a") as arquivo:
+        arquivo.write(f"Planeta: {planeta}, Quantidade: {quantidade}\n")
 
 class AplicacaoLojaPlanetas:
     def __init__(self, root):
@@ -447,6 +412,7 @@ class AplicacaoLojaPlanetas:
         self.lista_compras.insert(tk.END, planeta[0])
         self.total_gasto += 100  # Preço fixo de compra de cada planeta
         messagebox.showinfo("Compra Realizada", f"Você adicionou o planeta {planeta[0]} ao carrinho!")
+        registrar_venda(planeta[0], 1)
     
     def finalizar_compra(self):
         if not self.planetas_comprados:
