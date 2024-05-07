@@ -7,6 +7,7 @@ import random
 from ttkbootstrap import Style
 from tkinter import ttk
 from tkinter import simpledialog
+import json
 class Sistema:
     def __init__(self, root, empresa):
         self.root = root
@@ -262,7 +263,7 @@ class EmpresaPlanetas:
                 self.clientes.remove(cliente)
                 return "Cliente removido com sucesso."
         return "Cliente não encontrado."
-    
+
 class SistemaEstoque:
     def __init__(self, root, empresa):
         self.root = root
@@ -290,17 +291,30 @@ class SistemaEstoque:
         
         self.voltar_button = tk.Button(self.root, text='Voltar ao menu', command=self.voltar_menu_principal, bg='#4CAF50', fg='#ffffff', font=('Arial', 12))
         self.voltar_button.pack(pady=10)  # Adicionando margem
+        
+    def salvar_estoque(self):
+        with open("estoque.json", "w") as arquivo:
+            json.dump(self.itens, arquivo)
+            
+    def voltar_menu_principal1(self):
+        self.salvar_estoque()  # Salva o estoque ao fechar
+        self.root.destroy()        
+            
+    def carregar_estoque(self):
+        try:
+            with open("estoque.json", "r") as arquivo:
+                self.itens = json.load(arquivo)
+        except FileNotFoundError:
+            # Se o arquivo não existir, mantenha o estoque vazio
+            self.itens = {}            
 
     def atualizar_lista(self):
-        self.output_text.delete('1.0', tk.END)
-        for produto, info in self.itens.items():
-            # Adicionando espaços extras entre as informações
-            self.output_text.insert(tk.END, f"Produto: {produto:<10} | Preço: R${info['preco']:<7} |Quantidade: {info['quantidade']}\n")
+     self.output_text.delete('1.0', tk.END)
+     for produto, info in self.itens.items():
+        self.output_text.insert(tk.END, f"Produto: {produto:<10} | Preço: R${info['preco']:<7} | Quantidade: {info['quantidade']}\n")
         self.output_text.insert(tk.END, "\n")
 
-    def voltar_menu_principal(self):
-        # Aqui você pode implementar a função para voltar ao menu principal
-        pass
+    
 
     def limpar_campos(self):
         self.opcao_produto.set(next(iter(self.itens)))  # Define o primeiro item como padrão
@@ -308,8 +322,8 @@ class SistemaEstoque:
         self.message_label.config(text='')
 
     def voltar_menu_principal(self):
-         self.frame.destroy()   
-         app=EmpresaPlanetasApp()  
+         self.root.destroy()   
+         
             
              
 dados_planetas = [
@@ -324,28 +338,22 @@ dados_planetas = [
 ]
 # Dados fictícios dos planetas (nome, distância do sol, diâmetro, massa)
 dados_planetas = [
-    ("Mercúrio", 57.9, 4879, 3.3e23),
-    ("Vênus", 108.2, 12104, 4.9e24),
-    ("Terra", 149.6, 12742, 5.97e24),
-    ("Marte", 227.9, 6779, 6.4e23),
-    ("Júpiter", 778.6, 139822, 1.9e27),
-    ("Saturno", 1433.5, 116464, 5.7e26),
-    ("Urano", 2872.5, 50724, 8.7e25),
-    ("Netuno", 4495.1, 49244, 1.0e26),
+    ("Mercúrio", 100.00, 10),
+    ("Vênus", 100.00, 10),
+    ("Terra", 100.0, 10),
+    ("Marte", 100.0, 10),
+    ("Júpiter", 100.0, 10),
+    ("Saturno", 100.0, 10),
+    ("Urano", 100.0, 10),
+    ("Netuno", 100.0, 10),
 ]
-def registrar_venda(planeta, quantidade):
-    with open("vendas.txt", "a") as arquivo:
-        arquivo.write(f"Planeta: {planeta}, Quantidade: {quantidade}\n")
 
 class AplicacaoLojaPlanetas:
     def __init__(self, root):
         self.root = root
         self.root.title("Loja de Planetas")
         
-      # Escolha um tema de bootstrap
-        
-        # Lista para armazenar os planetas comprados
-        self.planetas_comprados = []
+        self.planetas_comprados = []  # Lista para armazenar os planetas comprados
         self.total_gasto = 0
         
         # Frames
@@ -386,7 +394,13 @@ class AplicacaoLojaPlanetas:
         self.rotulo_massa_valor = ttk.Label(self.frame_info_planeta, textvariable=self.var_massa)
         self.rotulo_massa_valor.pack()
         
-        # Botão para comprar
+        # Botão e campo de entrada para comprar
+        self.quantidade_label = ttk.Label(self.frame_info_planeta, text="Quantidade:")
+        self.quantidade_label.pack()
+        
+        self.quantidade_entry = ttk.Entry(self.frame_info_planeta)
+        self.quantidade_entry.pack()
+        
         self.botao_comprar = ttk.Button(self.frame_info_planeta, text="Adicionar ao Carrinho", command=self.adicionar_ao_carrinho)
         self.botao_comprar.pack()
         
@@ -408,11 +422,15 @@ class AplicacaoLojaPlanetas:
     def adicionar_ao_carrinho(self):
         indice = self.lista_planetas.curselection()[0]
         planeta = dados_planetas[indice]
-        self.planetas_comprados.append(planeta)
-        self.lista_compras.insert(tk.END, planeta[0])
-        self.total_gasto += 100  # Preço fixo de compra de cada planeta
-        messagebox.showinfo("Compra Realizada", f"Você adicionou o planeta {planeta[0]} ao carrinho!")
-        registrar_venda(planeta[0], 1)
+        quantidade = int(self.quantidade_entry.get())  # Captura a quantidade do campo de entrada
+        if quantidade <= planeta[2]:  # Verifica se a quantidade está disponível no estoque
+            planeta_comprado = (planeta[0], planeta[1], quantidade)  # Tupla com nome, preço e quantidade
+            self.planetas_comprados.append(planeta_comprado)
+            self.lista_compras.insert(tk.END, f"{planeta_comprado[0]} ({quantidade})")
+            self.total_gasto += planeta[1] * quantidade  # Atualiza o total gasto
+            messagebox.showinfo("Compra Realizada", f"Você adicionou {quantidade} unidades de {planeta[0]} ao carrinho!")
+        else:
+            messagebox.showwarning("Estoque Insuficiente", f"Desculpe, não há {quantidade} unidades disponíveis de {planeta[0]}.")
     
     def finalizar_compra(self):
         if not self.planetas_comprados:
@@ -421,18 +439,16 @@ class AplicacaoLojaPlanetas:
         
         mensagem = "Você comprou os seguintes planetas:\n\n"
         for planeta in self.planetas_comprados:
-            mensagem += f"- {planeta[0]}\n"
+            mensagem += f"- {planeta[0]} ({planeta[2]} unidades)\n"
         mensagem += f"\nTotal gasto: ${self.total_gasto}"
         
         messagebox.showinfo("Compra Finalizada", mensagem)
         
         # Fecha a janela principal após a finalização da compra
-        self.root.destroy()              
-        
+        self.root.destroy()  
     def abrir_loja(self):
          new_window = tk.Toplevel(self.root)
          sistema_loja = AplicacaoLojaPlanetas(new_window)     
-             
         
 
     
