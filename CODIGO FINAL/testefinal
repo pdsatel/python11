@@ -49,15 +49,15 @@ class EmpresaPlanetasApp:
         
         self.empresa = EmpresaPlanetas()
         
-        self.label_menu = ttk.Label(self.frame, text="Menu:")
+        self.label_menu = ttk.Label(self.frame, text="Menu:", font=('Arial', 16, 'bold'), )
         self.label_menu.grid(row=0, column=0, columnspan=2, sticky="w", pady=5)
         
         self.botao_cadastrar = ttk.Button(self.frame, text="Loja", command=self.abrir_loja)
-        self.botao_cadastrar.grid(row=1, column=0, columnspan=2, pady=5, sticky="ew")
+        self.botao_cadastrar.grid(row=2, column=0, columnspan=2, pady=5, sticky="ew")
         
         
         self.botao_cadastrar = ttk.Button(self.frame, text="Cadastrar novo cliente", command=self.cadastrar_cliente)
-        self.botao_cadastrar.grid(row=2, column=0, columnspan=2, pady=5, sticky="ew")
+        self.botao_cadastrar.grid(row=1, column=0, columnspan=2, pady=5, sticky="ew")
         
         self.botao_listar = ttk.Button(self.frame, text="Listar clientes", command=self.listar_clientes)
         self.botao_listar.grid(row=3, column=0, columnspan=2, pady=5, sticky="ew")
@@ -337,7 +337,7 @@ dados_planetas = [
     ("Netuno", 4495.1, 49528, 1.02e26)
 ]
 # Dados fictícios dos planetas (nome, distância do sol, diâmetro, massa)
-dados_planetas = [
+dados_planetas1 = [
     ("Mercúrio", 100.00, 10),
     ("Vênus", 100.00, 10),
     ("Terra", 100.0, 10),
@@ -353,13 +353,15 @@ class AplicacaoLojaPlanetas:
         self.root = root
         self.root.title("Loja de Planetas")
         
+        self.sistema_estoque = SistemaEstoque(root, "Minha Empresa")  # Instância do sistema de estoque
+        
         self.planetas_comprados = []  # Lista para armazenar os planetas comprados
         self.total_gasto = 0
         
         # Frames
         self.frame_info_planeta = ttk.Frame(self.root, padding="10")
         self.frame_info_planeta.pack(side="right", fill="both", expand=True)
-        self.frame_lista_planetas = ttk.Frame(self.root, padding="10")
+        self.frame_lista_planetas = ttk.Frame(self.root, padding="9")
         self.frame_lista_planetas.pack(side="left", fill="both", expand=True)
         
         # Lista de planetas
@@ -411,6 +413,9 @@ class AplicacaoLojaPlanetas:
         self.botao_finalizar_compra = ttk.Button(self.root, text="Finalizar Compra", command=self.finalizar_compra)
         self.botao_finalizar_compra.pack(side="bottom", pady=10)
         
+        self.botao_remover_carrinho = ttk.Button(self.root, text="Remover Item", command=self.remover_do_carrinho)
+        self.botao_remover_carrinho.pack(side="bottom", pady=5)   
+        
     def mostrar_info_planeta(self, evento):
         indice = self.lista_planetas.curselection()[0]
         planeta = dados_planetas[indice]
@@ -420,17 +425,22 @@ class AplicacaoLojaPlanetas:
         self.var_massa.set(f"{planeta[3]} kg")
     
     def adicionar_ao_carrinho(self):
-        indice = self.lista_planetas.curselection()[0]
-        planeta = dados_planetas[indice]
-        quantidade = int(self.quantidade_entry.get())  # Captura a quantidade do campo de entrada
-        if quantidade <= planeta[2]:  # Verifica se a quantidade está disponível no estoque
-            planeta_comprado = (planeta[0], planeta[1], quantidade)  # Tupla com nome, preço e quantidade
-            self.planetas_comprados.append(planeta_comprado)
-            self.lista_compras.insert(tk.END, f"{planeta_comprado[0]} ({quantidade})")
-            self.total_gasto += planeta[1] * quantidade  # Atualiza o total gasto
-            messagebox.showinfo("Compra Realizada", f"Você adicionou {quantidade} unidades de {planeta[0]} ao carrinho!")
-        else:
-            messagebox.showwarning("Estoque Insuficiente", f"Desculpe, não há {quantidade} unidades disponíveis de {planeta[0]}.")
+     indice = self.lista_planetas.curselection()[0]
+     planeta = dados_planetas[indice]
+     quantidade_desejada = int(self.quantidade_entry.get())  # Captura a quantidade do campo de entrada
+    
+    # Verifica se a quantidade desejada está disponível no estoque
+     if planeta[0] in self.sistema_estoque.itens and quantidade_desejada <= self.sistema_estoque.itens[planeta[0]]['quantidade']:
+        planeta_comprado = (planeta[0], planeta[1], quantidade_desejada)  # Tupla com nome, preço e quantidade
+        self.planetas_comprados.append(planeta_comprado)
+        self.lista_compras.insert(tk.END, f"{planeta_comprado[0]} ({quantidade_desejada})")
+        self.total_gasto += planeta[1] * quantidade_desejada  # Atualiza o total gasto
+        mensagem = f"Compra Realizada: Você adicionou {quantidade_desejada} unidades de {planeta[0]} ao carrinho!"
+     else:
+       mensagem = f"Estoque Insuficiente: Não há {quantidade_desejada} unidades disponíveis de {planeta[0]}."
+       messagebox.showwarning("Estoque Insuficiente", mensagem)
+     return
+
     
     def finalizar_compra(self):
         if not self.planetas_comprados:
@@ -441,14 +451,43 @@ class AplicacaoLojaPlanetas:
         for planeta in self.planetas_comprados:
             mensagem += f"- {planeta[0]} ({planeta[2]} unidades)\n"
         mensagem += f"\nTotal gasto: ${self.total_gasto}"
-        
+    
+        with open("estoque.json", "w") as f:
+            json.dump(self.sistema_estoque.itens, f)
+    
         messagebox.showinfo("Compra Finalizada", mensagem)
         
-        # Fecha a janela principal após a finalização da compra
-        self.root.destroy()  
+        # Atualizar o estoque somente quando a compra for finalizada com sucesso
+        for planeta in self.planetas_comprados:
+            if planeta[0] in self.sistema_estoque.itens:
+                quantidade = planeta[2]
+                self.sistema_estoque.itens[planeta[0]]['quantidade'] -= quantidade
+                self.sistema_estoque.atualizar_lista()  # Atualiza a lista de produtos na GUI
+        
+        # Limpa a lista de planetas comprados e o total gasto após a compra ser finalizada
+        self.planetas_comprados = []
+        self.total_gasto = 0
+        
+    def remover_do_carrinho(self):
+        indice = self.lista_compras.curselection()[0]
+        item_removido = self.lista_compras.get(indice)
+        for i, item in enumerate(self.planetas_comprados):
+            if item_removido.startswith(item[0]):
+                quantidade_removida = int(item_removido.split('(')[-1].split(')')[0])
+                self.total_gasto -= item[1] * quantidade_removida
+                del self.planetas_comprados[i]
+                break
+        self.lista_compras.delete(indice)
+        messagebox.showinfo("Item Removido", "Item removido do carrinho com sucesso.")
+           
+
     def abrir_loja(self):
          new_window = tk.Toplevel(self.root)
-         sistema_loja = AplicacaoLojaPlanetas(new_window)     
+         sistema_loja = AplicacaoLojaPlanetas(new_window) 
+            
+ 
+         
+   
         
 
     
