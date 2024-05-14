@@ -358,15 +358,19 @@ class SistemaEstoque:
             
              
 dados_planetas = {
-    "Mercúrio": {"preco": 57.9, "diametro": 4879, "massa": 3.3e23},
-    "Vênus": {"preco": 108.2, "diametro": 12104, "massa": 4.87e24},
-    "Terra": {"preco": 149.6, "diametro": 12756, "massa": 5.97e24},
-    "Marte": {"preco": 227.9, "diametro": 6792, "massa": 6.42e23},
-    "Júpiter": {"preco": 778.6, "diametro": 142984, "massa": 1.90e27},
-    "Saturno": {"preco": 1433.5, "diametro": 120536, "massa": 5.68e26},
-    "Urano": {"preco": 2872.5, "diametro": 51118, "massa": 8.68e25},
-    "Netuno": {"preco": 4495.1, "diametro": 49528, "massa": 1.02e26}
-}
+    "Mercúrio": {"preco": 100.00, "diametro": 4879, "massa": 3.3e23},
+    "Vênus": {"preco": 100.00, "diametro": 12104, "massa": 4.87e24},
+    "Terra": {"preco": 100.00, "diametro": 12756, "massa": 5.97e24},
+    "Marte": {"preco": 100.00, "diametro": 6792, "massa": 6.42e23},
+    "Júpiter": {"preco":100.00, "diametro": 142984, "massa": 1.90e27},
+    "Saturno": {"preco":100.00, "diametro": 120536, "massa": 5.68e26},
+    "Urano": {"preco": 100.00, "diametro": 51118, "massa": 8.68e25},
+    "Netuno": {"preco": 100.00, "diametro": 49528, "massa": 1.02e26},
+    "Satélite": {"preco": 100.00, "diametro": 51118, "massa": 8.68e25},
+    "Terra Plana": {"preco": 100.00, "diametro": 49528, "massa": 1.02e26}
+    
+    
+}    
 
 class AplicacaoLojaPlanetas:
     def __init__(self, root, nome_cliente):
@@ -420,6 +424,9 @@ class AplicacaoLojaPlanetas:
         
         self.botao_comprar = ttk.Button(self.frame_info_planeta, text="Adicionar ao Carrinho", command=self.adicionar_ao_carrinho)
         self.botao_comprar.pack()
+        
+        self.label_lista_itens = tk.Label(self.frame_lista_planetas, text='Na caso de mais de R$800.00 em compras, ganhe um vaucher de desconto', font=('Arial', 16, 'bold'), bg='#f0f0f0')
+        self.label_lista_itens.pack(pady=12)  # Adicionando margem
         
         # Lista de compras
         self.lista_compras = tk.Listbox(self.root, width=30, height=10)
