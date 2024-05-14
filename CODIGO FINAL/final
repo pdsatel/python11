@@ -300,22 +300,23 @@ class SistemaEstoque:
         self.root.title("Lista de Compras")
         
         self.itens = {
-            "Mercúrio":{"preco": 100.00, 'quantidade': 10},
-            "Vênus": {"preco": 100.00, 'quantidade': 10},
-            "Terra": {"preco": 100.0, 'quantidade': 10},
-            "Marte": {"preco": 100.0, 'quantidade': 10},
-            "Júpiter":{"preco": 100.0, 'quantidade': 10},
-            "Saturno":{"preco": 100.0, 'quantidade': 10},
-            "Urano":{"preco": 100.0, 'quantidade': 10},
-            "Netuno":{"preco": 100.0, 'quantidade': 10},
-            "Satelite":{"preco": 100.0, 'quantidade': 10},
-            "Terra Plana":{"preco": 100.0, 'quantidade': 10},
+            "Mercúrio": {"preco": 800.00, 'quantidade': 10},
+            "Vênus": {"preco": 350.00, 'quantidade': 10},
+            "Terra": {"preco": 2500.00, 'quantidade': 10},
+           "Marte": {"preco": 700.00, 'quantidade': 10},
+            "Júpiter": {"preco":700.00, 'quantidade': 10},
+            "Saturno": {"preco":500.00, 'quantidade': 10},
+            "Urano": {"preco": 400.00, 'quantidade': 10},
+            "Netuno": {"preco": 350.00, 'quantidade': 10},
+            "Satélite": {"preco": 400.00, 'quantidade': 10},
+            "Terra Plana": {"preco": 1000.00, 'quantidade': 10},
         }
         
         self.label_lista_itens = tk.Label(self.root, text='Lista de Itens:', font=('Arial', 16, 'bold'), bg='#f0f0f0')
         self.label_lista_itens.pack(pady=10)  # Adicionando margem
         
         self.output_text = tk.Text(self.root, height=10, width=50, bg='#ffffff', fg='#333333', font=('Arial', 12))
+
         self.output_text.pack(padx=10, pady=5)  # Adicionando margem
         
         self.atualizar_lista()
@@ -358,16 +359,16 @@ class SistemaEstoque:
             
              
 dados_planetas = {
-    "Mercúrio": {"preco": 100.00, "diametro": 4879, "massa": 3.3e23},
-    "Vênus": {"preco": 100.00, "diametro": 12104, "massa": 4.87e24},
-    "Terra": {"preco": 100.00, "diametro": 12756, "massa": 5.97e24},
-    "Marte": {"preco": 100.00, "diametro": 6792, "massa": 6.42e23},
-    "Júpiter": {"preco":100.00, "diametro": 142984, "massa": 1.90e27},
-    "Saturno": {"preco":100.00, "diametro": 120536, "massa": 5.68e26},
-    "Urano": {"preco": 100.00, "diametro": 51118, "massa": 8.68e25},
-    "Netuno": {"preco": 100.00, "diametro": 49528, "massa": 1.02e26},
-    "Satélite": {"preco": 100.00, "diametro": 51118, "massa": 8.68e25},
-    "Terra Plana": {"preco": 100.00, "diametro": 49528, "massa": 1.02e26}
+    "Mercúrio": {"preco": 800.00, "diametro": 4879, "massa": 3.3e23},
+    "Vênus": {"preco": 350.00, "diametro": 12104, "massa": 4.87e24},
+    "Terra": {"preco": 2500.00, "diametro": 12756, "massa": 5.97e24},
+    "Marte": {"preco": 700.00, "diametro": 6792, "massa": 6.42e23},
+    "Júpiter": {"preco":700.00, "diametro": 142984, "massa": 1.90e27},
+    "Saturno": {"preco":500.00, "diametro": 120536, "massa": 5.68e26},
+    "Urano": {"preco": 400.00, "diametro": 51118, "massa": 8.68e25},
+    "Netuno": {"preco": 350.00, "diametro": 49528, "massa": 1.02e26},
+    "Satélite": {"preco": 400.00, "diametro": 51118, "massa": 8.68e25},
+    "Terra Plana": {"preco": 1000.00, "diametro": 49528, "massa": 1.02e26}
     
     
 }    
@@ -390,7 +391,7 @@ class AplicacaoLojaPlanetas:
         self.frame_lista_planetas.pack(side="left", fill="both", expand=True)
         
         # Adicionando o texto "Escolha seu Produto:" antes do Listbox
-        self.label_lista_itens = tk.Label(self.frame_lista_planetas, text='Escolha seu Produto:', font=('Arial', 16, 'bold'), bg='#f0f0f0')
+        self.label_lista_itens = tk.Label(self.frame_lista_planetas, text='Escolha seu Produto abaixo ↓ ↓ :', font=('Arial', 16, 'bold'), bg='#f0f0f0')
         self.label_lista_itens.pack(pady=12)  # Adicionando margem
         
         # Lista de planetas
@@ -425,7 +426,7 @@ class AplicacaoLojaPlanetas:
         self.botao_comprar = ttk.Button(self.frame_info_planeta, text="Adicionar ao Carrinho", command=self.adicionar_ao_carrinho)
         self.botao_comprar.pack()
         
-        self.label_lista_itens = tk.Label(self.frame_lista_planetas, text='Na caso de mais de R$800.00 em compras, ganhe um vaucher de desconto', font=('Arial', 16, 'bold'), bg='#f0f0f0')
+        self.label_lista_itens = tk.Label(self.frame_lista_planetas, text='Na caso de mais de R$800.00 em compras, ganhe um vaucher de desconto ', font=('Arial', 16, 'bold'), bg='#f0f0f0')
         self.label_lista_itens.pack(pady=12)  # Adicionando margem
         
         # Lista de compras
@@ -467,7 +468,7 @@ class AplicacaoLojaPlanetas:
 
         total_gasto_sem_desconto = sum(item[1] * item[2] for item in self.planetas_comprados)
 
-        mensagem = f"Você, {self.nome_cliente}, comprou os seguintes planetas:\n\n"  
+        mensagem = f"Você, {self.nome_cliente},comprou os seguintes planetas:\n\n"  
         for planeta in self.planetas_comprados:
             mensagem += f"- {planeta[0]} ({planeta[2]} unidades)\n"
         mensagem += f"\nTotal gasto antes do desconto: R${total_gasto_sem_desconto:.2f}\n"
@@ -498,6 +499,8 @@ class AplicacaoLojaPlanetas:
 
     def criar_nota_fiscal(self, cliente, itens_comprados, total_gasto):
         nota_fiscal = f"NOTA FISCAL\n\nCliente: {cliente}\n\nItens Comprados:\n"
+        self.label_lista_itens = tk.Label(self.frame_lista_planetas, text='PlANETAT COMPANY' , font=('Arial', 16, 'bold'), bg='#f0f0f0')
+        self.label_lista_itens.pack(pady=12)
         for item in itens_comprados:
             nome_item, preco_unitario, quantidade = item
             subtotal = preco_unitario * quantidade
