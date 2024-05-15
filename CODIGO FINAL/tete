@@ -513,7 +513,7 @@ class AplicacaoLojaPlanetas:
         self.quantidade_entry = ttk.Entry(self.frame_info_planeta)
         self.quantidade_entry.pack()
         
-        self.label_titulo_carrinho = tk.Label(self.root, text='Carrinho 🛒', font=('Arial', 16, 'bold'))
+        self.label_titulo_carrinho = tk.Label(self.root, text='Carrinho', font=('Arial', 16, 'bold'))
         self.label_titulo_carrinho.pack(side="top", pady=10)
 
         self.lista_compras = tk.Listbox(self.root, width=30, height=10)
@@ -524,6 +524,9 @@ class AplicacaoLojaPlanetas:
 
         self.botao_remover_carrinho = ttk.Button(self.root, text="Remover Item", command=self.remover_do_carrinho)
         self.botao_remover_carrinho.pack(side="bottom", pady=5)   
+        
+        self.botao_comprar = ttk.Button(self.frame_info_planeta, text="Adicionar ao Carrinho", command=self.adicionar_ao_carrinho)
+        self.botao_comprar.pack()
         
         
         
@@ -607,6 +610,7 @@ class AplicacaoLojaPlanetas:
                 break
         self.lista_compras.delete(indice)
         messagebox.showinfo("Item Removido", "Item removido do carrinho com sucesso.")
+        
         
         
         
