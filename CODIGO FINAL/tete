@@ -8,6 +8,7 @@ from ttkbootstrap import Style
 from tkinter import ttk
 from tkinter import simpledialog
 import json  
+import string
 
 class Sistema:
     def __init__(self, root, empresa):
@@ -26,6 +27,7 @@ class Sistema:
     def voltar_menu_principal(self):
      self.root.destroy()
      app=EmpresaPlanetasApp
+           
 
 
 
@@ -37,7 +39,7 @@ class Cliente:
         self.telefone = telefone
         self.email = email
         self.numero_cadastro = None
-        
+
 class EmpresaPlanetasApp:
     def __init__(self, root):
         style = Style(theme='darkly')
@@ -47,12 +49,12 @@ class EmpresaPlanetasApp:
         self.frame = ttk.Frame(self.root, padding="10")
         self.frame.pack()
         
-        self.empresa = EmpresaPlanetas()
+        self.empresa = EmpresaPlanetas()   
         
-        self.label_menu = ttk.Label(self.frame, text="Menu:", font=('Arial', 16, 'bold'), )
+        self.label_menu = ttk.Label(self.frame, text="Planetar company:", font=('Arial', 16, 'bold'), )
         self.label_menu.grid(row=0, column=0, columnspan=2, sticky="w", pady=5)
         
-        self.botao_cadastrar = ttk.Button(self.frame, text="Loja", command=self.abrir_loja)
+        self.botao_cadastrar = ttk.Button(self.frame, text="Loja de planetas", command=self.confirmar_cliente)
         self.botao_cadastrar.grid(row=2, column=0, columnspan=2, pady=5, sticky="ew")
         
         
@@ -73,11 +75,21 @@ class EmpresaPlanetasApp:
         
         self.botao_sair = ttk.Button(self.frame, text="Sair", command=self.root.quit)
         self.botao_sair.grid(row=7, column=0, columnspan=2, pady=5, sticky="ew")
-        
-    def abrir_loja(self):
+ 
+    def confirmar_cliente(self):
+        cpf = simpledialog.askstring("Confirmação de Cliente", "Por favor, insira seu CPF para entrar na loja de planetas:")
+        if cpf:
+            cliente = self.empresa.buscar_cliente(cpf)
+            if cliente:
+                nome_cliente = cliente['nome']
+                self.abrir_loja(nome_cliente)  
+            else:
+                messagebox.showerror("Cliente não encontrado", "CPF não cadastrado. Você não tem acesso à loja de planetas.")
+
+    def abrir_loja(self, nome_cliente):
         new_window = tk.Toplevel(self.root)
-        sistema_loja = AplicacaoLojaPlanetas(new_window)     
-                 
+        sistema_loja = AplicacaoLojaPlanetas(new_window, nome_cliente)  
+        
 
     def abrir_sistema_estoque(self):
         new_window = tk.Toplevel(self.root)
@@ -86,8 +98,8 @@ class EmpresaPlanetasApp:
     def cadastrar_cliente(self):
         self.cadastro_cliente_window = tk.Toplevel(self.root)
         self.cadastro_cliente_window.title("Cadastrar Cliente")
-        
-          # Centralizar a janela no meio da tela
+    
+        # Centralizar a janela no meio da tela
         window_width = 400  # largura da janela
         window_height = 300  # altura da janela
         screen_width = self.cadastro_cliente_window.winfo_screenwidth()
@@ -95,48 +107,48 @@ class EmpresaPlanetasApp:
         x_coordinate = (screen_width - window_width) // 2
         y_coordinate = (screen_height - window_height) // 2
         self.cadastro_cliente_window.geometry(f"{window_width}x{window_height}+{x_coordinate}+{y_coordinate}")
-        
+
         self.frame_cadastro = ttk.Frame(self.cadastro_cliente_window, padding="10")
         self.frame_cadastro.pack()
         self.frame_cadastro = ttk.Frame(self.cadastro_cliente_window, padding="10")
         self.frame_cadastro.pack()
     
-        
 
         ttk.Label(self.frame_cadastro, text="Nome:").grid(row=0, column=0, sticky="w", padx=5, pady=2)
         self.nome_entry = ttk.Entry(self.frame_cadastro)
         self.nome_entry.grid(row=0, column=1, padx=5, pady=2)
         self.nome_entry.bind('<Return>', lambda event: self.cpf_entry.focus())  # Move para o campo de CPF ao pressionar Enter
-        
+    
         ttk.Label(self.frame_cadastro, text="CPF:").grid(row=1, column=0, sticky="w", padx=5, pady=2)
         self.cpf_entry = ttk.Entry(self.frame_cadastro)
         self.cpf_entry.grid(row=1, column=1, padx=5, pady=2)
         self.cpf_entry.bind('<Return>', lambda event: self.endereco_entry.focus())  # Move para o campo de endereço ao pressionar Enter
-        
+    
         ttk.Label(self.frame_cadastro, text="Endereço:").grid(row=2, column=0, sticky="w", padx=5, pady=2)
         self.endereco_entry = ttk.Entry(self.frame_cadastro)
         self.endereco_entry.grid(row=2, column=1, padx=5, pady=2)
         self.endereco_entry.bind('<Return>', lambda event: self.telefone_entry.focus())  # Move para o campo de telefone ao pressionar Enter
-        
+    
         ttk.Label(self.frame_cadastro, text="Telefone:").grid(row=3, column=0, sticky="w", padx=5, pady=2)
         self.telefone_entry = ttk.Entry(self.frame_cadastro)
         self.telefone_entry.grid(row=3, column=1, padx=5, pady=2)
         self.telefone_entry.bind('<Return>', lambda event: self.email_entry.focus())  # Move para o campo de e-mail ao pressionar Enter
-        
+    
         ttk.Label(self.frame_cadastro, text="E-mail:").grid(row=4, column=0, sticky="w", padx=5, pady=2)
         self.email_entry = ttk.Entry(self.frame_cadastro)
         self.email_entry.grid(row=4, column=1, padx=5, pady=2)
-        self.email_entry.bind('<Return>', lambda event: self.limpar_campos())  # Move para o botão de confirmar ao pressionar Enter
-        
-        self.botao_confirmar = ttk.Button(self.frame_cadastro, text="Confirmar", command=self.confirmar_cpf)
-        self.botao_confirmar.grid(row=5, column=0, columnspan=2, pady=5)
-        
+        self.email_entry.bind('<Return>', lambda event: self.confirmar_cpf())  # Move para o botão de confirmar ao pressionar Enter
+
+
+        self.botao_confirmação = ttk.Button(self.frame_cadastro, text="Confirmar", command=self.confirmar_cpf)
+        self.botao_confirmação.grid(row=5, column=0, columnspan=2, pady=5)  # Confirma CPF
+
     def confirmar_cpf(self):
         cpf_digitado = self.cpf_entry.get()
         confirmacao = messagebox.askyesno("Confirmação de CPF", f"Confirme se o CPF '{cpf_digitado}' está correto.")
         if confirmacao:
-            self.realizar_cadastro()    
-        
+            self.realizar_cadastro()
+
      
         
     def realizar_cadastro(self):
@@ -152,33 +164,30 @@ class EmpresaPlanetasApp:
         with open(self.empresa.arquivo_json, "w") as arquivo:
             json.dump(self.empresa.clientes, arquivo, indent=4)
 
-            
-    def listar_clientes(self):
-     lista_clientes_window = tk.Toplevel(self.root)
-     lista_clientes_window.title("Lista de Clientes")
-     
-     label_clientes=ttk.Label(lista_clientes_window, text='Lista de Clientes',font=('Arial',14,'bold'))
-     label_clientes.pack(pady=5)
-
-    # Cria um widget de texto para exibir a lista de clientes
-     lista_clientes_text = tk.Text(lista_clientes_window, height=15, width=50)
-     lista_clientes_text.pack(padx=10, pady=10)
-
-    # Obtém a lista de clientes da empresa
-     clientes = self.empresa.listar_clientes()
-
-    # Verifica se há clientes
-     if not clientes:
-        lista_clientes_text.insert(tk.END, "Não há clientes cadastrados.")
-     else:
-        # Exibe os detalhes de cada cliente no widget de texto
-        for cliente in clientes:
-            lista_clientes_text.insert(tk.END, f"Nome: {cliente['nome']}\n CPF: {cliente['cpf']}\n Endereço: {cliente['endereco']}\n Telefone: {cliente['telefone']}\n\n")
-
-    # Botão para fechar a janela
-     botao_fechar = tk.Button(lista_clientes_window, text="Voltar ao Menu", command=lista_clientes_window.destroy)
-     botao_fechar.pack(pady=10)
     
+    def listar_clientes(self):
+    
+            lista_clientes_window = tk.Toplevel(self.root)
+            lista_clientes_window.title("Lista de Clientes")
+
+            # Cria um widget de texto para exibir a lista de clientes
+            lista_clientes_text = tk.Text(lista_clientes_window, height=20, width=50)
+            lista_clientes_text.pack(padx=10, pady=10)
+
+            # Obtém a lista de clientes da empresa
+            clientes = self.empresa.listar_clientes()
+
+            # Verifica se há clientes
+            if not clientes:
+                lista_clientes_text.insert(tk.END, "Não há clientes cadastrados.")
+            else:
+                # Exibe os detalhes de cada cliente no widget de texto
+                for cliente in clientes:
+                    lista_clientes_text.insert(tk.END, f"Nome: {cliente['nome']}\nCPF: {cliente['cpf']}\nEndereço: {cliente['endereco']}\nTelefone: {cliente['telefone']}\n\n")
+
+            # Botão para fechar a janela
+            botao_fechar = tk.Button(lista_clientes_window, text="Fechar", command=lista_clientes_window.destroy)
+            botao_fechar.pack(pady=10)
     def atualizar_cliente(self):
         cpf = simpledialog.askstring("Atualizar Cliente", "Informe o CPF do cliente que deseja atualizar:")
         if cpf:
@@ -284,24 +293,12 @@ class EmpresaPlanetas:
         else:
             raise ValueError("Cliente não encontrado.")
 
-
 class SistemaEstoque:
     def __init__(self, root, empresa):
         self.root = root
         self.root.title("Lista de Compras")
         
-        self.itens = {
-            "Mercúrio": {"preco": 100.00, 'quantidade': 10},
-            "Vênus": {"preco": 100.00, 'quantidade': 10},
-            "Terra": {"preco": 100.0, 'quantidade': 10},
-            "Marte": {"preco": 100.0, 'quantidade': 10},
-            "Júpiter": {"preco": 100.0, 'quantidade': 10},
-            "Saturno": {"preco": 100.0, 'quantidade': 10},
-            "Urano": {"preco": 100.0, 'quantidade': 10},
-            "Netuno": {"preco": 100.0, 'quantidade': 10},
-            "Satélite": {"preco": 100.0, 'quantidade': 10},
-            "Terra Planta": {"preco": 10000.0, 'quantidade': 1},
-        }
+        self.itens = {}
         
         self.label_lista_itens = tk.Label(self.root, text='Lista de Itens:', font=('Arial', 16, 'bold'), bg='#f0f0f0')
         self.label_lista_itens.pack(pady=10)  # Adicionando margem
@@ -309,7 +306,19 @@ class SistemaEstoque:
         self.output_text = tk.Text(self.root, height=10, width=50, bg='#ffffff', fg='#333333', font=('Arial', 12))
         self.output_text.pack(padx=10, pady=5)  # Adicionando margem
         
+        self.carregar_estoque()  # Carrega o estoque ao iniciar o sistema
+        
         self.atualizar_lista()
+        
+        # Botões para atualizar quantidade, adicionar e remover item
+        self.atualizar_button = tk.Button(self.root, text='Atualizar Quantidade', command=self.atualizar_quantidade_gui, bg='#4CAF50', fg='#ffffff', font=('Arial', 12))
+        self.atualizar_button.pack(pady=5)
+        
+        self.adicionar_button = tk.Button(self.root, text='Adicionar Item', command=self.adicionar_item_gui, bg='#4CAF50', fg='#ffffff', font=('Arial', 12))
+        self.adicionar_button.pack(pady=5)
+        
+        self.remover_button = tk.Button(self.root, text='Remover Item', command=self.remover_item_gui, bg='#4CAF50', fg='#ffffff', font=('Arial', 12))
+        self.remover_button.pack(pady=5)
         
         self.voltar_button = tk.Button(self.root, text='Voltar ao menu', command=self.voltar_menu_principal1, bg='#4CAF50', fg='#ffffff', font=('Arial', 12))
         self.voltar_button.pack(pady=10)  # Adicionando margem
@@ -336,117 +345,194 @@ class SistemaEstoque:
             self.output_text.insert(tk.END, f"Produto: {produto:<10} | Preço: R${info['preco']:<7} | Quantidade: {info['quantidade']}\n")
             self.output_text.insert(tk.END, "\n")
 
-    
+    def atualizar_quantidade(self, produto, quantidade):
+        if produto in self.itens:
+            self.itens[produto]['quantidade'] += quantidade
+        else:
+            print("Produto não encontrado.")
 
+    def adicionar_item(self, produto, preco, quantidade):
+        if produto not in self.itens:
+            self.itens[produto] = {'preco': preco, 'quantidade': quantidade}
+            self.loja.atualizar_lista_itens()  # Atualiza a lista de itens na loja
+        else:
+            print("Produto já existe no estoque. Use 'atualizar_quantidade' para adicionar mais.")
+
+    def remover_item(self, produto):
+        if produto in self.itens:
+            del self.itens[produto]
+            self.loja.atualizar_lista_itens()  # Atualiza a lista de itens na loja
+        else:
+            print("Produto não encontrado.")
+    
+    def atualizar_quantidade_gui(self):
+        # Interface para atualizar a quantidade
+        self.atualizar_window = tk.Toplevel(self.root)
+        self.atualizar_window.title("Atualizar Quantidade")
+        
+        label_produto = tk.Label(self.atualizar_window, text="Produto:")
+        label_produto.pack()
+        self.produto_entry = tk.Entry(self.atualizar_window)
+        self.produto_entry.pack()
+        
+        label_quantidade = tk.Label(self.atualizar_window, text="Quantidade:")
+        label_quantidade.pack()
+        self.quantidade_entry = tk.Entry(self.atualizar_window)
+        self.quantidade_entry.pack()
+        
+        atualizar_button = tk.Button(self.atualizar_window, text="Atualizar", command=self.atualizar_quantidade_confirm)
+        atualizar_button.pack()
+        
+    def atualizar_quantidade_confirm(self):
+        produto = self.produto_entry.get()
+        quantidade = int(self.quantidade_entry.get())
+        self.atualizar_quantidade(produto, quantidade)
+        self.atualizar_lista()
+        self.atualizar_window.destroy()
+    
+    def adicionar_item_gui(self):
+        # Interface para adicionar um novo item
+        self.adicionar_window = tk.Toplevel(self.root)
+        self.adicionar_window.title("Adicionar Item")
+        
+        label_produto = tk.Label(self.adicionar_window, text="Produto:")
+        label_produto.pack()
+        self.produto_entry = tk.Entry(self.adicionar_window)
+        self.produto_entry.pack()
+        
+        label_preco = tk.Label(self.adicionar_window, text="Preço:")
+        label_preco.pack()
+        self.preco_entry = tk.Entry(self.adicionar_window)
+        self.preco_entry.pack()
+        
+        label_quantidade = tk.Label(self.adicionar_window, text="Quantidade:")
+        label_quantidade.pack()
+        self.quantidade_entry = tk.Entry(self.adicionar_window)
+        self.quantidade_entry.pack()
+        
+        adicionar_button = tk.Button(self.adicionar_window, text="Adicionar", command=self.adicionar_item_confirm)
+        adicionar_button.pack()
+        
+    def adicionar_item_confirm(self):
+        produto = self.produto_entry.get()
+        preco = float(self.preco_entry.get())
+        quantidade = int(self.quantidade_entry.get())
+        self.adicionar_item(produto, preco, quantidade)
+        self.atualizar_lista()
+        self.adicionar_window.destroy()
+    
+    def remover_item_gui(self):
+        # Interface para remover um item
+        self.remover_window = tk.Toplevel(self.root)
+        self.remover_window.title("Remover Item")
+        
+        label_produto = tk.Label(self.remover_window, text="Produto:")
+        label_produto.pack()
+        self.produto_entry = tk.Entry(self.remover_window)
+        self.produto_entry.pack()
+        
+        remover_button = tk.Button(self.remover_window, text="Remover", command=self.remover_item_confirm)
+        remover_button.pack()
+        
+    def remover_item_confirm(self):
+        produto = self.produto_entry.get()
+        self.remover_item(produto)
+        self.atualizar_lista()
+        self.remover_window.destroy()
+    
     def limpar_campos(self):
         self.opcao_produto.set(next(iter(self.itens)))  
         self.input_quantidade.delete(0, tk.END)
         self.message_label.config(text='')
 
     def voltar_menu_principal(self):
-         self.root.destroy()   
-         
+         self.root.destroy()
             
              
 dados_planetas = {
-    "Mercúrio": {"preco": 57.9, "diametro": 4879, "massa": 3.3e23},
-    "Vênus": {"preco": 108.2, "diametro": 12104, "massa": 4.87e24},
-    "Terra": {"preco": 149.6, "diametro": 12756, "massa": 5.97e24},
-    "Marte": {"preco": 227.9, "diametro": 6792, "massa": 6.42e23},
-    "Júpiter": {"preco": 778.6, "diametro": 142984, "massa": 1.90e27},
-    "Saturno": {"preco": 1433.5, "diametro": 120536, "massa": 5.68e26},
-    "Urano": {"preco": 2872.5, "diametro": 51118, "massa": 8.68e25},
-    "Netuno": {"preco": 4495.1, "diametro": 49528, "massa": 1.02e26}
-}
+    "Mercúrio": {"preco": 800.00, "diametro": 4879, "massa": 3.3e23},
+    "Vênus": {"preco": 350.00, "diametro": 12104, "massa": 4.87e24},
+    "Terra": {"preco": 2500.00, "diametro": 12756, "massa": 5.97e24},
+    "Marte": {"preco": 700.00, "diametro": 6792, "massa": 6.42e23},
+    "Júpiter": {"preco":700.00, "diametro": 142984, "massa": 1.90e27},
+    "Saturno": {"preco":500.00, "diametro": 120536, "massa": 5.68e26},
+    "Urano": {"preco": 400.00, "diametro": 51118, "massa": 8.68e25},
+    "Netuno": {"preco": 350.00, "diametro": 49528, "massa": 1.02e26},
+    "Satélite": {"preco": 400.00, "diametro": 51118, "massa": 8.68e25},
+    "Terra Plana": {"preco": 1000.00, "diametro": 49528, "massa": 1.02e26}
+    
+    
+}    
 
 class AplicacaoLojaPlanetas:
-    def __init__(self, root):
+    def __init__(self, root, nome_cliente):
         self.root = root
         self.root.title("Loja de Planetas")
+        self.nome_cliente = nome_cliente 
         
-        self.sistema_estoque = SistemaEstoque(root, "Minha Empresa")
-        # Instância do sistema de estoque
+        self.sistema_estoque = SistemaEstoque(root, "Minha Empresa")  # Instância do sistema de estoque
         
         self.planetas_comprados = []  # Lista para armazenar os planetas comprados
         self.total_gasto = 0
-        
         # Frames
-        cpf = simpledialog.askstring("Confirmar CPF", "Informe o seu CPF do se deseja continuar:")
-        if cpf:
-            cliente = self.empresa.buscar_cliente(cpf)
-            if cliente:
-             self.frame_info_planeta = ttk.Frame(self.root, padding="10")
-             self.frame_info_planeta.pack(side="right", fill="both", expand=True)
-             self.frame_lista_planetas = ttk.Frame(self.root, padding="9")
-             self.frame_lista_planetas.pack(side="left", fill="both", expand=True)
+        self.frame_info_planeta = ttk.Frame(self.root, padding="3")
+        self.frame_info_planeta.pack(side="right", fill="both", expand=True)
+        self.frame_lista_planetas = ttk.Frame(self.root, padding="6")
+        self.frame_lista_planetas.pack(side="left", fill="both", expand=True)
+        
+        # Adicionando o texto "Escolha seu Produto:" antes do Listbox
+        self.label_lista_itens = tk.Label(self.frame_lista_planetas, text='Escolha seu Produto abaixo ↓ ↓ :', font=('Arial', 16, 'bold'), bg='#f0f0f0')
+        self.label_lista_itens.pack(pady=12)  # Adicionando margem
         
         # Lista de planetas
-             self.lista_planetas = tk.Listbox(self.frame_lista_planetas, width=20, height=10)
-             self.lista_planetas.pack(fill="both", expand=True)
-             self.lista_planetas.bind("<<ListboxSelect>>", self.mostrar_info_planeta)
+        self.lista_planetas = tk.Listbox(self.frame_lista_planetas, width=20, height=10)
+        self.lista_planetas.pack(fill="both", expand=True)
+        self.lista_planetas.bind("<<ListboxSelect>>", self.mostrar_info_planeta)
         
         # Adiciona os planetas à lista
-             for planeta in dados_planetas:
-              self.lista_planetas.insert(tk.END, planeta)
-        
-        # Labels para as informações do planeta
-             self.rotulo_distancia = ttk.Label(self.frame_info_planeta, text="Distância do Sol:")
-             self.rotulo_distancia.pack()
-        
-             self.rotulo_diametro.pack()
-         
-             self.rotulo_massa = ttk.Label(self.frame_info_planeta, text="Massa:")
-             self.rotulo_massa.pack()
+        for planeta in dados_planetas:
+            self.lista_planetas.insert(tk.END, planeta)
         
         # Valores das informações do planeta
-             self.var_distancia = tk.StringVar()
-             self.rotulo_distancia_valor = ttk.Label(self.frame_info_planeta, textvariable=self.var_distancia)
-             self.rotulo_distancia_valor.pack()
+        self.var_distancia = tk.StringVar()
+        self.rotulo_distancia_valor = ttk.Label(self.frame_info_planeta, textvariable=self.var_distancia)
+        self.rotulo_distancia_valor.pack()
         
-             self.var_diametro = tk.StringVar()
-             self.rotulo_diametro_valor = ttk.Label(self.frame_info_planeta, textvariable=self.var_diametro)
-             self.rotulo_diametro_valor.pack()
+        self.var_diametro = tk.StringVar()
+        self.rotulo_diametro_valor = ttk.Label(self.frame_info_planeta, textvariable=self.var_diametro)
+        self.rotulo_diametro_valor.pack()
         
-             self.var_massa = tk.StringVar()
-             self.rotulo_massa_valor = ttk.Label(self.frame_info_planeta, textvariable=self.var_massa)
-             self.rotulo_massa_valor.pack()
+        self.var_massa = tk.StringVar()
+        self.rotulo_massa_valor = ttk.Label(self.frame_info_planeta, textvariable=self.var_massa)
+        self.rotulo_massa_valor.pack()
         
         # Botão e campo de entrada para comprar
-             self.quantidade_label = ttk.Label(self.frame_info_planeta, text="Quantidade:")
-             self.quantidade_label.pack()
+        self.quantidade_label = ttk.Label(self.frame_info_planeta, text="Quantidade de planetas para compra:")
+        self.quantidade_label.pack()
         
-             self.quantidade_entry = ttk.Entry(self.frame_info_planeta)
-             self.quantidade_entry.pack()
+        self.quantidade_entry = ttk.Entry(self.frame_info_planeta)
+        self.quantidade_entry.pack()
         
-             self.botao_comprar = ttk.Button(self.frame_info_planeta, text="Adicionar ao Carrinho", command=self.adicionar_ao_carrinho)
-             self.botao_comprar.pack()
+        self.label_titulo_carrinho = tk.Label(self.root, text='Carrinho 🛒', font=('Arial', 16, 'bold'))
+        self.label_titulo_carrinho.pack(side="top", pady=10)
+
+        self.lista_compras = tk.Listbox(self.root, width=30, height=10)
+        self.lista_compras.pack(side="bottom", fill="both", expand=True)
+
+        self.botao_finalizar_compra = ttk.Button(self.root, text="Finalizar Compra", command=self.finalizar_compra)
+        self.botao_finalizar_compra.pack(side="bottom", pady=10)
+
+        self.botao_remover_carrinho = ttk.Button(self.root, text="Remover Item", command=self.remover_do_carrinho)
+        self.botao_remover_carrinho.pack(side="bottom", pady=5)   
         
-        # Lista de compras
-             self.lista_compras = tk.Listbox(self.root, width=30, height=10)
-             self.lista_compras.pack(side="bottom", fill="both", expand=True)
         
-             self.botao_finalizar_compra = ttk.Button(self.root, text="Finalizar Compra", command=self.finalizar_compra)
-             self.botao_finalizar_compra.pack(side="bottom", pady=10)
         
-             self.botao_remover_carrinho = ttk.Button(self.root, text="Remover Item", command=self.remover_do_carrinho)
-             self.botao_remover_carrinho.pack(side="bottom", pady=5)   
-             
-    def confirmaçao_cliente(self):
-         cpf = simpledialog.askstring("Confirmar CPF", "Informe o seu CPF do se deseja continuar:")
-         if cpf:
-            cliente = self.empresa.buscar_cliente(cpf)
-            if cliente: 
-                self.abrir_loja()
         
     def mostrar_info_planeta(self, evento):
         indice = self.lista_planetas.curselection()[0]
         planeta_nome = self.lista_planetas.get(indice)
         planeta = dados_planetas[planeta_nome]
         
-        self.var_distancia.set(f"{planeta['distancia']} milhões de km")
-        self.var_diametro.set(f"{planeta['diametro']} km")
-        self.var_massa.set(f"{planeta['massa']} kg")
-    
     def adicionar_ao_carrinho(self):
         indice = self.lista_planetas.curselection()[0]
         planeta_nome = self.lista_planetas.get(indice)
@@ -469,30 +555,41 @@ class AplicacaoLojaPlanetas:
             messagebox.showwarning("Aviso", "Você ainda não adicionou nenhum planeta ao carrinho!")
             return
 
-        mensagem = "Você comprou os seguintes planetas:\n\n"
+        total_gasto_sem_desconto = sum(item[1] * item[2] for item in self.planetas_comprados)
+
+        mensagem = f"Você, {self.nome_cliente},comprou os seguintes planetas:\n\n"  
         for planeta in self.planetas_comprados:
             mensagem += f"- {planeta[0]} ({planeta[2]} unidades)\n"
-        mensagem += f"\nTotal gasto: ${self.total_gasto:.2f}"
+        mensagem += f"\nTotal gasto antes do desconto: R${total_gasto_sem_desconto:.2f}\n"
 
-        # Gerar a nota fiscal
-        nota_fiscal = self.criar_nota_fiscal("Nome do Cliente", self.planetas_comprados, self.total_gasto)
+    
+        if total_gasto_sem_desconto > 800:
+            desconto = total_gasto_sem_desconto * 0.1 
+            total_gasto_com_desconto = total_gasto_sem_desconto - desconto
+            mensagem += f"\nVocê recebeu um desconto de 10%!\n"
+            mensagem += f"Total gasto com desconto: R${total_gasto_com_desconto:.2f}\n"
+        else:
+            total_gasto_com_desconto = total_gasto_sem_desconto
+            mensagem += f"\nTotal gasto: R${total_gasto_sem_desconto:.2f}\n"
+
+        nota_fiscal = self.criar_nota_fiscal(self.nome_cliente, self.planetas_comprados, total_gasto_com_desconto) 
 
         messagebox.showinfo("Compra Finalizada", mensagem)
         messagebox.showinfo("Nota Fiscal", nota_fiscal)
 
-        # Atualizar o estoque somente quando a compra for finalizada com sucesso
+    
         for planeta in self.planetas_comprados:
             nome_planeta, preco_unitario, quantidade = planeta
             if nome_planeta in self.sistema_estoque.itens:
                 self.sistema_estoque.itens[nome_planeta]['quantidade'] -= quantidade
                 self.sistema_estoque.atualizar_lista()
 
-        # Limpar a lista de planetas comprados e o total gasto após a compra ser finalizada
         self.planetas_comprados = []
-        self.total_gasto = 0
 
     def criar_nota_fiscal(self, cliente, itens_comprados, total_gasto):
         nota_fiscal = f"NOTA FISCAL\n\nCliente: {cliente}\n\nItens Comprados:\n"
+        self.label_lista_itens = tk.Label(self.frame_lista_planetas, text='PlANETAT COMPANY' , font=('Arial', 16, 'bold'), bg='#f0f0f0')
+        self.label_lista_itens.pack(pady=12)
         for item in itens_comprados:
             nome_item, preco_unitario, quantidade = item
             subtotal = preco_unitario * quantidade
@@ -518,8 +615,6 @@ class AplicacaoLojaPlanetas:
            
 
     def abrir_loja(self):
-        self.salvar_estoque()
-        self.carrega_estoque()
         new_window = tk.Toplevel(self.root)
         sistema_loja = AplicacaoLojaPlanetas(new_window) 
             
